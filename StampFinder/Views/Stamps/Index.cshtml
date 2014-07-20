@@ -1,0 +1,29 @@
+﻿@model StampFinder.Models.Stamp[]
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Stamps</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Scott #</th>
+            <th>Status</th>
+            <th>Cat Val Used</th>
+            <th>Cat Val Mint</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var stamp in Model)
+        {
+            <tr>
+                <td>@Html.ActionLink(stamp.ScottId, "Edit", new { Id = stamp.Id })</td>
+                <td>@stamp.Status</td>
+                <td>@stamp.CatValueUsed</td>
+                <td>@stamp.CatValueMint</td>
+            </tr>
+        }
+    </tbody>
+</table>
