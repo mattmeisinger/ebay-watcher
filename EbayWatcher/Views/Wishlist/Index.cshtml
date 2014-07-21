@@ -1,0 +1,29 @@
+﻿@model StampFinder.Models.WishlistItem[]
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Stamps</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Status</th>
+            <th>Notes</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.ActionLink(item.Name, "Edit", new { Id = item.Id })</td>
+                <td>@item.Category</td>
+                <td>@item.Status</td>
+                <td>@item.Notes</td>
+            </tr>
+        }
+    </tbody>
+</table>
