@@ -1,4 +1,4 @@
-﻿@model EbayWatcher.Models.WishlistItem[]
+﻿@model EbayWatcher.Models.EndedItem[]
 
 @{
     ViewBag.Title = "Index";
@@ -9,6 +9,7 @@
 <table class="table">
     <thead>
         <tr>
+            <th></th>
             <th>Name</th>
             <th>Category</th>
             <th>Status</th>
@@ -25,8 +26,8 @@
                 <td>@item.Status</td>
                 <td>@item.Notes</td>
                 <td>
-                    @Html.ActionLink("View Ended", "ViewEnded", new { id = item.Id }, new { target = "_blank" })
-                    @Html.ActionLink("View Current", "ViewCurrent", new { id = item.Id }, new { target = "_blank" })
+                    @Html.ActionLink("ViewEnded", "View Ended", new { id = item.Id }, new { target = "_blank" })
+                    @Html.ActionLink("ViewCurrent", "View Current", new { id = item.Id }, new { target = "_blank" })
                 </td>
             </tr>
         }

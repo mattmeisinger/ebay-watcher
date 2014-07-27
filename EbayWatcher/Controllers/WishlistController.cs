@@ -1,30 +1,32 @@
-﻿using StampFinder.Entities;
-using StampFinder.Models;
+﻿using EbayWatcher.BusinessLogic;
+using EbayWatcher.Entities;
+using EbayWatcher.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace StampFinder.Controllers
+namespace EbayWatcher.Controllers
 {
     public class WishlistController : Controller
     {
-        // GET: Stamps
+        // GET: Wishlist
         public ActionResult Index()
         {
             using (var context = new EbayWatcherContext())
             {
-                if (!context.Stamps.Any())
+                if (!context.WishlistItems.Any())
                 {
-                    context.Stamps.Add(new Models.WishlistItem
+                    context.WishlistItems.Add(new Models.WishlistItem
                     {
+                        UserId = EbayWatcher.BusinessLogic.Users.GetCurrentUserId(),
                         Status = "Need",
                         Name = "1"
                     });
                     context.SaveChanges();
                 }
-                return View(context.Stamps.ToArray());
+                return View(context.WishlistItems.ToArray());
             }
         }
 
@@ -34,7 +36,7 @@ namespace StampFinder.Controllers
             using (var context = new EbayWatcherContext())
             {
                 if (Id.HasValue)
-                    return View(context.Stamps.Single(a => a.Id == Id));
+                    return View(context.WishlistItems.Single(a => a.Id == Id));
                 else
                     return View(new WishlistItem { });
             }
@@ -48,12 +50,12 @@ namespace StampFinder.Controllers
                 WishlistItem s = null;
                 if (o.Id == 0)
                 {
-                    s = new WishlistItem { };
-                    context.Stamps.Add(s);
+                    s = new WishlistItem { UserId = EbayWatcher.BusinessLogic.Users.GetCurrentUserId() };
+                    context.WishlistItems.Add(s);
                 }
                 else
                 {
-                    s = context.Stamps.Single(a => a.Id == o.Id);
+                    s = context.WishlistItems.Single(a => a.Id == o.Id);
                 }
 
                 s.Name = o.Name;
@@ -65,6 +67,16 @@ namespace StampFinder.Controllers
                 o.Id = s.Id;
 
                 return RedirectToAction("Edit", new { Id = o.Id });
+            }
+        }
+
+        public ActionResult ViewEnded(int id)
+        {
+            using (var context = new EbayWatcherContext())
+            {
+                var item = context.WishlistItems.Single(a => a.Id == id);
+                var completedItems = Ebay.GetCompletedItems(item.Name, "");
+                return Content("success");
             }
         }
     }
