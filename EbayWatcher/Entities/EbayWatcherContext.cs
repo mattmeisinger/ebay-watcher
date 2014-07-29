@@ -10,5 +10,6 @@ namespace EbayWatcher.Entities
     public class EbayWatcherContext : DbContext
     {
         public DbSet<WishlistItem> WishlistItems { get; set; }
+        public DbSet<AppSetting> AppSettings { get; set; }
     }
 }

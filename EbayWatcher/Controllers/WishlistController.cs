@@ -9,9 +9,8 @@ using System.Web.Mvc;
 
 namespace EbayWatcher.Controllers
 {
-    public class WishlistController : Controller
+    public class WishlistController : BaseController
     {
-        // GET: Wishlist
         public ActionResult Index()
         {
             using (var context = new EbayWatcherContext())
@@ -77,6 +76,16 @@ namespace EbayWatcher.Controllers
                 var item = context.WishlistItems.Single(a => a.Id == id);
                 var completedItems = Ebay.GetCompletedItems(item.Name, "");
                 return Content("success");
+            }
+        }
+
+        public ActionResult ViewCurrent(int id)
+        {
+            using (var context = new EbayWatcherContext())
+            {
+                var item = context.WishlistItems.Single(a => a.Id == id);
+                var completedItems = Ebay.GetCurrentItems(item.Name, "");
+                return Json(completedItems, JsonRequestBehavior.AllowGet);
             }
         }
     }

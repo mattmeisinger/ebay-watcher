@@ -1,0 +1,27 @@
+﻿@model EbayWatcher.Models.WishlistItem[]
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Application Settings</h2>
+
+<p>You must enter valid eBay Api access keys in order to use this application.</p>
+<p>This form should only be used locally, or over an HTTPS connection. Otherwise your key will be sent in plain text across the internet.</p>
+<p>For production deployment, add DevID and AppID to the web.config under 'appSettings'.</p>
+
+<form role="form" method="post">
+    <div class="form-group">
+        <label for="DevID">DevID</label>
+        <input type="text" class="form-control" id="DevID" name="DevID" value="@ViewBag.DevID" placeholder="DevID">
+    </div>
+    <div class="form-group">
+        <label for="AppID">AppID</label>
+        <input type="text" class="form-control" id="AppID" name="AppID" value="@ViewBag.AppID" placeholder="AppID">
+    </div>
+    <div class="form-group">
+        <label for="RuName">RuName</label>
+        <input type="text" class="form-control" id="RuName" name="RuName" value="@ViewBag.RuName" placeholder="RuName">
+    </div>
+    <button type="submit" class="btn btn-default">Submit</button>
+</form>

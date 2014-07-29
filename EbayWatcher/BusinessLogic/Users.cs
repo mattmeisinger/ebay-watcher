@@ -11,5 +11,10 @@ namespace EbayWatcher.BusinessLogic
         {
             return 1;
         }
+
+        internal static bool IsLoggedIn()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
