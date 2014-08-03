@@ -1,0 +1,22 @@
+﻿@model EbayWatcher.Models.SuggestedCategory[]
+
+<form method="post" id="findCategoryForm">
+    @Html.Label("SearchTerm", "Search for:")
+    @Html.TextBox("SearchTerm", (string)ViewBag.SearchTerm)
+    <button type="submit" class="btn btn-primary">Search</button>
+
+    @if (Model != null)
+    {
+        foreach (var item in Model)
+        {
+            <div>
+                @foreach (var parentItem in item.Parents)
+                {
+                    <a href="#" class="ebay-category" data-id="@parentItem.Id">@parentItem.Name</a>
+                    <text> > </text>
+                }
+                <a href="#" class="ebay-category" data-id="@item.Id">@item.Name</a>
+            </div>
+        }
+    }
+</form>

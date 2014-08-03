@@ -10,8 +10,12 @@ namespace EbayWatcher
     {
         internal static void RegisterBundles(BundleCollection bundles)
         {
-            bundles.Add(new ScriptBundle("~/Scripts/js").Include("~/Scripts/scripts.js"));
-            bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/site.css"));
+            bundles.Add(new ScriptBundle("~/Scripts/js")
+                .Include("~/Scripts/jquery-ui-1.10.4.js")
+                .IncludeDirectory("~/Scripts/EbayWatcher", "*.js"));
+            bundles.Add(new StyleBundle("~/Content/css")
+                .Include("~/Content/themes/base/jquery-ui.css")
+                .Include("~/Content/Site.css"));
         }
     }
 }

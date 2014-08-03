@@ -9,8 +9,7 @@ namespace EbayWatcher.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
-            ContextKey = "EbayWatcher.Entities.EbayWatcherContext";
+            AutomaticMigrationsEnabled = true;
         }
 
         protected override void Seed(EbayWatcher.Entities.EbayWatcherContext context)

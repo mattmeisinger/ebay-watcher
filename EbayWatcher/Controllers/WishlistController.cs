@@ -1,5 +1,6 @@
 ﻿using EbayWatcher.BusinessLogic;
 using EbayWatcher.Entities;
+using EbayWatcher.Entities.Models;
 using EbayWatcher.Models;
 using System;
 using System.Collections.Generic;
@@ -15,16 +16,16 @@ namespace EbayWatcher.Controllers
         {
             using (var context = new EbayWatcherContext())
             {
-                if (!context.WishlistItems.Any())
-                {
-                    context.WishlistItems.Add(new Models.WishlistItem
-                    {
-                        UserId = EbayWatcher.BusinessLogic.Users.GetCurrentUserId(),
-                        Status = "Need",
-                        Name = "1"
-                    });
-                    context.SaveChanges();
-                }
+                //if (!context.WishlistItems.Any())
+                //{
+                //    context.WishlistItems.Add(new WishlistItem
+                //    {
+                //        UserId = EbayWatcher.BusinessLogic.Users.GetCurrentUserId(),
+                //        Status = "Need",
+                //        Name = "1"
+                //    });
+                //    context.SaveChanges();
+                //}
                 return View(context.WishlistItems.ToArray());
             }
         }
@@ -58,7 +59,7 @@ namespace EbayWatcher.Controllers
                 }
 
                 s.Name = o.Name;
-                s.Category = o.Category;
+                s.CategoryId = o.CategoryId;
                 s.Status = o.Status;
                 s.Notes = o.Notes;
 
@@ -84,9 +85,22 @@ namespace EbayWatcher.Controllers
             using (var context = new EbayWatcherContext())
             {
                 var item = context.WishlistItems.Single(a => a.Id == id);
-                var completedItems = Ebay.GetCurrentItems(item.Name, "");
+                var completedItems = Ebay.GetCurrentItems(item.Name, item.CategoryId);
                 return Json(completedItems, JsonRequestBehavior.AllowGet);
             }
+        }
+
+        public ActionResult _FindCategory()
+        {
+            return PartialView();
+        }
+
+        [HttpPost]
+        public ActionResult _FindCategory(string searchTerm)
+        {
+            ViewBag.SearchTerm = searchTerm;
+            var data = Ebay.FindCategories(searchTerm);
+            return PartialView(data);
         }
     }
 }
