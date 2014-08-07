@@ -11,8 +11,9 @@ namespace EbayWatcher.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.LoginUrl = Ebay.GetLoginUrl();
-            return View();
+            //ViewBag.LoginUrl = Ebay.GetLoginUrl();
+            Session["AuthenticatingWithEbay"] = true;
+            return Redirect(Ebay.GetLoginUrl());
         }
     }
 }

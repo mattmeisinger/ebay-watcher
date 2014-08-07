@@ -49,23 +49,26 @@ namespace EbayWatcher.BusinessLogic
             {
                 SoapApiServerUrl = System.Configuration.ConfigurationManager.AppSettings["TradingServerAddress"],
                 ApiCredential = new ApiCredential {
+                    ApiAccount = new ApiAccount {
+                        Application = AppSettings.Get("AppID"),
+                        Developer = AppSettings.Get("DevID"),
+                        Certificate = AppSettings.Get("CertID")
+                    },
                     eBayToken = AppSettings.Get("EBayToken")
                 },
                 Site = eBay.Service.Core.Soap.SiteCodeType.US
             };
 
             return apiContext;
-
-            ////set Api logging
-            //apiContext.ApiLogManager = new ApiLogManager();
-            //apiContext.ApiLogManager.EnableLogging = true;
         }
         internal static string GetLoginUrl()
         {
-            // var ruName = AppSettings.Get("RuName");
-            // var urlEncodedSessionID = "";
-            // return string.Format("https://signin.sandbox.ebay.com/ws/eBayISAPI.dll?SignIn&runame={0}&SessID={1}", ruName, urlEncodedSessionID);
-            return "";
+            var ruName = AppSettings.Get("RuName");
+            var client = GetSdkClient();
+            var call = new GetSessionIDCall(client);
+            var sessionId = call.GetSessionID(ruName);
+            var urlEncodedSessionID = HttpUtility.UrlEncode(sessionId);
+            return string.Format("https://signin.ebay.com/ws/eBayISAPI.dll?SignIn&runame={0}&SessID={1}", ruName, urlEncodedSessionID);
         }
         #endregion
 
