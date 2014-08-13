@@ -1,5 +1,6 @@
 ﻿using EbayWatcher.Entities.Models;
 using EbayWatcher.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -8,7 +9,7 @@ using System.Web;
 
 namespace EbayWatcher.Entities
 {
-    public class EbayWatcherContext : DbContext
+    public class EbayWatcherContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<WishlistItem> WishlistItems { get; set; }
         public DbSet<WishlistItemHistoricalItem> WishlistItemHistoricalItems { get; set; }
@@ -17,6 +18,8 @@ namespace EbayWatcher.Entities
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<WishlistItem>().HasRequired(p => p.Category)
                 .WithMany(a => a.WishlistItems)
                 .HasForeignKey(a => a.CategoryId);
@@ -28,6 +31,15 @@ namespace EbayWatcher.Entities
             modelBuilder.Entity<WishlistItemIgnoreItem>().HasRequired(p => p.WishlistItem)
                 .WithMany(a => a.WishlistItemIgnoreItems)
                 .HasForeignKey(a => a.WishlistItemId);
+
+            modelBuilder.Entity<WishlistItem>().HasRequired(p => p.User)
+                .WithMany(a => a.WishlistItems)
+                .HasForeignKey(a => a.UserId);
+        }
+
+        public static EbayWatcherContext Create()
+        {
+            return new EbayWatcherContext();
         }
     }
 }

@@ -3,17 +3,21 @@ using eBay.Service.Core.Sdk;
 using eBay.Service.Core.Soap;
 using eBay.Service.Finding.Finding;
 using eBay.Services;
+using EbayWatcher.Entities;
 using EbayWatcher.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Web;
-using EbayWatcher.Utilities;
 
 namespace EbayWatcher.BusinessLogic
 {
     public class Ebay
     {
+        private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
+
         #region Client Setup
         private static bool apiSettingsLoaded = false;
         public static bool ApiSettingsValid()
@@ -67,6 +71,8 @@ namespace EbayWatcher.BusinessLogic
             var client = GetSdkClient();
             var call = new GetSessionIDCall(client);
             var sessionId = call.GetSessionID(ruName);
+            HttpContext.Current.Session["SessionId"] = sessionId;
+
             var urlEncodedSessionID = HttpUtility.UrlEncode(sessionId);
             return string.Format("https://signin.ebay.com/ws/eBayISAPI.dll?SignIn&runame={0}&SessID={1}", ruName, urlEncodedSessionID);
         }
@@ -115,25 +121,63 @@ namespace EbayWatcher.BusinessLogic
         internal static SuggestedCategory[] FindCategories(string searchTerm)
         {
             // Get suggested categories from Ebay
-            var context = GetSdkClient();
-            var req = new GetSuggestedCategoriesCall(context);
-            var categories = req.GetSuggestedCategories(searchTerm);
+            using (var context = new EbayWatcherContext())
+            {
+                var client = GetSdkClient();
+                var req = new GetSuggestedCategoriesCall(client);
+                var categories = req.GetSuggestedCategories(searchTerm);
 
-            // Convert into POCO objects
-            return categories.Cast<SuggestedCategoryType>()
-                .Select(a => new SuggestedCategory
+                // Convert into POCO objects
+                var suggestedCategories = new List<SuggestedCategory>();
+                foreach (var a in categories.Cast<SuggestedCategoryType>())
                 {
-                    Id = a.Category.CategoryID.ToIntOrDefault().Value,
-                    Name = a.Category.CategoryName,
-                    Parents = a.Category.CategoryParentID.Cast<string>()
-                        .Select((id, index) => new Entities.Models.Category
+                    // Build list of parent categories
+                    var parents = new List<Entities.Models.Category>();
+                    for (int i = 0; i < a.Category.CategoryParentID.Count; i++)
+                    {
+                        var category = new Entities.Models.Category
                         {
-                            Id = a.Category.CategoryParentID[index].ToIntOrDefault().Value,
-                            Name = a.Category.CategoryParentName[index]
-                        })
-                        .ToArray()
-                })
-                .ToArray();
+                            Id = a.Category.CategoryParentID[i].ToIntOrDefault().Value,
+                            Name = a.Category.CategoryParentName[i]
+                        };
+                        parents.Add(category);
+                    }
+
+                    // Go through the categories and determine what the full category
+                    // name is (with parents included in the string)
+                    var fullCategoryName = new StringBuilder();
+                    foreach (var item in parents)
+                    {
+                        fullCategoryName.Append(item.Name);
+                        item.FullName = fullCategoryName.ToString();
+                        fullCategoryName.Append(" > ");
+                    }
+                    fullCategoryName.Append(a.Category.CategoryName);
+
+                    // Create new category
+                    var newItem = new SuggestedCategory();
+                    newItem.Id = a.Category.CategoryID.ToIntOrDefault().Value;
+                    newItem.Name = a.Category.CategoryName;
+                    newItem.Parents = parents.ToArray();
+                    newItem.FullName = fullCategoryName.ToString();
+                    suggestedCategories.Add(newItem);
+                }
+
+                // Add any categories that don't exist yet to the database
+                var categoryIdsInDatabase = context.Categories.Select(a => a.Id).ToList();
+                var ebayQueryResults = suggestedCategories.Select(a => a as Entities.Models.Category).Union(suggestedCategories.SelectMany(a => a.Parents)).ToArray();
+                foreach (var item in ebayQueryResults)
+                {
+                    if (!categoryIdsInDatabase.Contains(item.Id))
+                    {
+                        context.Categories.Add(item);
+                        categoryIdsInDatabase.Add(item.Id);
+                    }
+                }
+                context.SaveChanges();
+
+                return suggestedCategories.ToArray();
+            }
         }
 
         //internal static void GetCategories()
@@ -148,5 +192,54 @@ namespace EbayWatcher.BusinessLogic
         //        System.Diagnostics.Debug.WriteLine(item);
         //    }
         //}
+
+        internal static bool StartedAuthenticatingWithEbay()
+        {
+            // If SessionId has already been sent, then that means the user has already been
+            // sent to the login page.
+            var sessionId = HttpContext.Current.Session["SessionId"].ToStringOrDefault();
+            return !sessionId.IsNullOrWhiteSpace();
+        }
+
+        internal static bool IsAuthenticatedWithEbay()
+        {
+            if (Users.IsLoggedIn())
+            {
+                return true;
+            }
+            else
+            {
+                // If they started the login process, check if they completed and a token is waiting.
+                if (StartedAuthenticatingWithEbay())
+                {
+                    // Get token from Ebay
+                    var sessionId = HttpContext.Current.Session["SessionId"].ToStringOrDefault();
+                    var client = GetSdkClient();
+                    var call = new FetchTokenCall(client);
+                    var token = call.FetchToken(sessionId);
+
+                    // If the token comes back empty, that means they didn't complete the sign-in process.
+                    if (token.IsNullOrWhiteSpace())
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        // Otherwise get the user id of the logged in user from Ebay
+                        var userCall = new ConfirmIdentityCall(client);
+                        var userId = userCall.ConfirmIdentity(sessionId).ToLowerOrDefault(); // Always use the lowercase version of the username
+
+                        // Set session variables identifying the user
+                        HttpContext.Current.Session["Token"] = token;
+                        HttpContext.Current.Session["UserId"] = userId;
+                        return true;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
     }
 }

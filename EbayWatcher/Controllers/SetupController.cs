@@ -20,7 +20,7 @@ namespace EbayWatcher.Controllers
             {
                 if (string.IsNullOrWhiteSpace(DevID) || string.IsNullOrWhiteSpace(AppID) || string.IsNullOrWhiteSpace(RuName))
                 {
-                    throw new Exception("DevID and AppID must contain values.");
+                    throw new Exception("DevID and AppID and RuName must contain values.");
                 }
 
                 // Save the settings entered

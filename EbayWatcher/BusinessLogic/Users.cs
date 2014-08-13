@@ -7,14 +7,17 @@ namespace EbayWatcher.BusinessLogic
 {
     public class Users
     {
-        public static int GetCurrentUserId()
+        public static string GetCurrentUsername()
         {
-            return 1;
+            return HttpContext.Current.Session["UserId"].ToStringOrDefault();
         }
-
-        internal static bool IsLoggedIn()
+        public static object GetCurrentUserToken()
         {
-            throw new NotImplementedException();
+            return HttpContext.Current.Session["Token"].ToStringOrDefault();
+        }
+        public static bool IsLoggedIn()
+        {
+            return GetCurrentUsername() != null && GetCurrentUserToken() != null;
         }
     }
 }

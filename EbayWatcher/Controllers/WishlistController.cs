@@ -12,8 +12,10 @@ namespace EbayWatcher.Controllers
 {
     public class WishlistController : BaseController
     {
+        [Authorize]
         public ActionResult Index()
         {
+            var auth = HttpContext.GetOwinContext().Authentication;
             using (var context = new EbayWatcherContext())
             {
                 //if (!context.WishlistItems.Any())
@@ -50,7 +52,7 @@ namespace EbayWatcher.Controllers
                 WishlistItem s = null;
                 if (o.Id == 0)
                 {
-                    s = new WishlistItem { UserId = EbayWatcher.BusinessLogic.Users.GetCurrentUserId() };
+                    s = new WishlistItem { UserId = EbayWatcher.BusinessLogic.Users.GetCurrentUsername() };
                     context.WishlistItems.Add(s);
                 }
                 else
@@ -75,7 +77,7 @@ namespace EbayWatcher.Controllers
             using (var context = new EbayWatcherContext())
             {
                 var item = context.WishlistItems.Single(a => a.Id == id);
-                var completedItems = Ebay.GetCompletedItems(item.Name, "");
+                var completedItems = Ebay.GetCompletedItems(item.Name, "261");
                 return Content("success");
             }
         }
@@ -90,17 +92,20 @@ namespace EbayWatcher.Controllers
             }
         }
 
-        public ActionResult _FindCategory()
-        {
-            return PartialView();
-        }
-
         [HttpPost]
         public ActionResult _FindCategory(string searchTerm)
         {
             ViewBag.SearchTerm = searchTerm;
-            var data = Ebay.FindCategories(searchTerm);
-            return PartialView(data);
+
+            if (searchTerm != null && searchTerm.Length > 2)
+            {
+                var data = Ebay.FindCategories(searchTerm);
+                return PartialView(data);
+            }
+            else
+            {
+                return Content("Unable to find categories. Please enter a valid search term larger than 2 characters.");
+            }
         }
     }
 }

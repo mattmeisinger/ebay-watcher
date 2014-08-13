@@ -7,13 +7,13 @@ using System.Web.Mvc;
 
 namespace EbayWatcher.Controllers
 {
-    public class LoginController : Controller
+    public class HomeController : Controller
     {
+        // GET: Home
+        [Authorize]
         public ActionResult Index()
         {
-            //ViewBag.LoginUrl = Ebay.GetLoginUrl();
-            Session["AuthenticatingWithEbay"] = true;
-            return Redirect(Ebay.GetLoginUrl());
+            return RedirectToAction("Index", "Wishlist");
         }
     }
 }
