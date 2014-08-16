@@ -52,7 +52,7 @@ namespace EbayWatcher.Controllers
                 WishlistItem s = null;
                 if (o.Id == 0)
                 {
-                    s = new WishlistItem { UserId = EbayWatcher.BusinessLogic.Users.GetCurrentUsername() };
+                    s = new WishlistItem { UserId = EbayWatcher.BusinessLogic.Users.GetCurrentUser().UserName };
                     context.WishlistItems.Add(s);
                 }
                 else

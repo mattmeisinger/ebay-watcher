@@ -4,6 +4,7 @@ using eBay.Service.Core.Soap;
 using eBay.Service.Finding.Finding;
 using eBay.Services;
 using EbayWatcher.Entities;
+using EbayWatcher.Entities.Models;
 using EbayWatcher.Models;
 using System;
 using System.Collections.Generic;
@@ -71,8 +72,8 @@ namespace EbayWatcher.BusinessLogic
             var client = GetSdkClient();
             var call = new GetSessionIDCall(client);
             var sessionId = call.GetSessionID(ruName);
-            HttpContext.Current.Session["SessionId"] = sessionId;
-
+            Users.SaveUserEbaySessionId(sessionId);
+            
             var urlEncodedSessionID = HttpUtility.UrlEncode(sessionId);
             return string.Format("https://signin.ebay.com/ws/eBayISAPI.dll?SignIn&runame={0}&SessID={1}", ruName, urlEncodedSessionID);
         }
@@ -197,8 +198,8 @@ namespace EbayWatcher.BusinessLogic
         {
             // If SessionId has already been sent, then that means the user has already been
             // sent to the login page.
-            var sessionId = HttpContext.Current.Session["SessionId"].ToStringOrDefault();
-            return !sessionId.IsNullOrWhiteSpace();
+
+            return !Users.GetCurrentUser().EbaySessionId.IsNullOrWhiteSpace();
         }
 
         internal static bool IsAuthenticatedWithEbay()
@@ -213,7 +214,7 @@ namespace EbayWatcher.BusinessLogic
                 if (StartedAuthenticatingWithEbay())
                 {
                     // Get token from Ebay
-                    var sessionId = HttpContext.Current.Session["SessionId"].ToStringOrDefault();
+                    var sessionId = Users.GetCurrentUser().EbaySessionId;
                     var client = GetSdkClient();
                     var call = new FetchTokenCall(client);
                     var token = call.FetchToken(sessionId);
@@ -230,8 +231,7 @@ namespace EbayWatcher.BusinessLogic
                         var userId = userCall.ConfirmIdentity(sessionId).ToLowerOrDefault(); // Always use the lowercase version of the username
 
                         // Set session variables identifying the user
-                        HttpContext.Current.Session["Token"] = token;
-                        HttpContext.Current.Session["UserId"] = userId;
+                        Users.SaveUserEbayToken(token);
                         return true;
                     }
                 }

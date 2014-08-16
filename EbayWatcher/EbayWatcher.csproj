@@ -275,6 +275,14 @@
     <Compile Include="Migrations\201408030023027_Initial.Designer.cs">
       <DependentUpon>201408030023027_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201408160403015_Added attributes to users.cs" />
+    <Compile Include="Migrations\201408160403015_Added attributes to users.Designer.cs">
+      <DependentUpon>201408160403015_Added attributes to users.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201408160405057_Added EbayToken to user profile.cs" />
+    <Compile Include="Migrations\201408160405057_Added EbayToken to user profile.Designer.cs">
+      <DependentUpon>201408160405057_Added EbayToken to user profile.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\EbayCurrentItem.cs" />
     <Compile Include="Models\EbayItem.cs" />
@@ -327,6 +335,12 @@
     <EmbeddedResource Include="Migrations\201408091457112_Add full name to Categories.resx">
       <DependentUpon>201408091457112_Add full name to Categories.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201408160403015_Added attributes to users.resx">
+      <DependentUpon>201408160403015_Added attributes to users.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201408160405057_Added EbayToken to user profile.resx">
+      <DependentUpon>201408160405057_Added EbayToken to user profile.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -340,7 +354,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>49210</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

@@ -11,6 +11,9 @@ namespace EbayWatcher.Entities.Models
 {
     public class ApplicationUser : IdentityUser
     {
+        public string EbayToken { get; set; }
+        public string EbaySessionId { get; set; }
+        
         public ICollection<WishlistItem> WishlistItems { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)

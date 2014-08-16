@@ -20,7 +20,7 @@ namespace EbayWatcher.Controllers
             {
                 if (Ebay.IsAuthenticatedWithEbay())
                 {
-                    var username = Users.GetCurrentUsername();
+                    var username = Users.GetCurrentUser().UserName;
 
                     // Create user if it doesn't already exist
                     var user = UserManager.Users.SingleOrDefault(a => a.UserName == username);
