@@ -1,7 +1,5 @@
 ﻿using EbayWatcher.BusinessLogic;
 using EbayWatcher.Entities.Models;
-using Microsoft.AspNet.Identity;
-using Microsoft.Owin.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,24 +16,14 @@ namespace EbayWatcher.Controllers
         {
             if (!Users.IsLoggedIn())
             {
-                if (Ebay.IsAuthenticatedWithEbay())
+                if (await Ebay.IsAuthenticatedWithEbay(UserManager, AuthenticationManager))
                 {
-                    var username = Users.GetCurrentUser().UserName;
-
-                    // Create user if it doesn't already exist
-                    var user = UserManager.Users.SingleOrDefault(a => a.UserName == username);
-                    if (user == null)
-                    {
-                        user = new ApplicationUser() { UserName = username };
-                        UserManager.Create(user);
-                    }
-
-                    // Log into identity
-                    var identity = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
-                    AuthenticationManager.SignIn(new AuthenticationProperties { IsPersistent = false }, identity);
-
                     return RedirectToAction("Index", "Wishlist");
                 }
+            }
+            else
+            {
+                return Content("Already logged in");
             }
 
             return View();
@@ -43,13 +31,18 @@ namespace EbayWatcher.Controllers
 
         public ActionResult Logout()
         {
+            HttpContext.Session["EbaySessionId"] = null;
+            HttpContext.Session["EbayToken"] = null;
             HttpContext.GetOwinContext().Authentication.SignOut();
             return Content("Logged out");
         }
 
         public ActionResult ToGoEbayLogin()
         {
-            return Redirect(Ebay.GetLoginUrl());
+            var sessionId = Ebay.GetNewSessionId();
+            HttpContext.Session["EbaySessionId"] = sessionId;
+            var ebayLoginUrl = Ebay.GetLoginUrl(sessionId);
+            return Redirect(ebayLoginUrl);
         }
     }
 }

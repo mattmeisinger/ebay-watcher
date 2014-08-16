@@ -43,7 +43,8 @@ namespace EbayWatcher.BusinessLogic
             var manager = new ApplicationUserManager(store);
             var context = (EbayWatcherContext)store.Context;
 
-            var user = manager.Users.Single(a => a.UserName == GetCurrentUser().UserName);
+            var currentUsername = GetCurrentUser().UserName;
+            var user = manager.Users.Single(a => a.UserName == );
             user.EbaySessionId = sessionId;
             manager.Update(user);
             context.SaveChanges();
@@ -55,10 +56,23 @@ namespace EbayWatcher.BusinessLogic
             var manager = new ApplicationUserManager(store);
             var context = (EbayWatcherContext)store.Context;
 
-            var user = manager.Users.Single(a => a.UserName == GetCurrentUser().UserName);
+            var currentUsername = GetCurrentUser().UserName;
+            var user = manager.Users.Single(a => a.UserName == currentUsername);
             user.EbayToken = token;
             manager.Update(user);
             context.SaveChanges();
+        }
+
+        internal static string GetCurrentSessionId()
+        {
+            if (Users.IsLoggedIn())
+            {
+                return GetCurrentUser().EbaySessionId;
+            }
+            else
+            {
+                return HttpContext.Current.Session["EbaySessionId"].ToStringOrDefault();
+            }
         }
     }
 }

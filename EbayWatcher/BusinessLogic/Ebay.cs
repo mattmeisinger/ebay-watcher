@@ -6,12 +6,15 @@ using eBay.Services;
 using EbayWatcher.Entities;
 using EbayWatcher.Entities.Models;
 using EbayWatcher.Models;
+using Microsoft.Owin.Security;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Web;
+using System.Threading.Tasks;
 
 namespace EbayWatcher.BusinessLogic
 {
@@ -66,14 +69,17 @@ namespace EbayWatcher.BusinessLogic
 
             return apiContext;
         }
-        internal static string GetLoginUrl()
+        internal static string GetNewSessionId()
         {
             var ruName = AppSettings.Get("RuName");
             var client = GetSdkClient();
             var call = new GetSessionIDCall(client);
             var sessionId = call.GetSessionID(ruName);
-            Users.SaveUserEbaySessionId(sessionId);
-            
+            return sessionId;
+        }
+        internal static string GetLoginUrl(string sessionId)
+        {
+            var ruName = AppSettings.Get("RuName");
             var urlEncodedSessionID = HttpUtility.UrlEncode(sessionId);
             return string.Format("https://signin.ebay.com/ws/eBayISAPI.dll?SignIn&runame={0}&SessID={1}", ruName, urlEncodedSessionID);
         }
@@ -199,10 +205,18 @@ namespace EbayWatcher.BusinessLogic
             // If SessionId has already been sent, then that means the user has already been
             // sent to the login page.
 
-            return !Users.GetCurrentUser().EbaySessionId.IsNullOrWhiteSpace();
+            if (Users.IsLoggedIn())
+            {
+                var user = Users.GetCurrentUser();
+                return !user.EbaySessionId.IsNullOrWhiteSpace();
+            }
+            else
+            {
+                return !HttpContext.Current.Session["EbaySessionId"].ToStringOrDefault().IsNullOrWhiteSpace();
+            }
         }
 
-        internal static bool IsAuthenticatedWithEbay()
+        internal static async Task<bool> IsAuthenticatedWithEbay(ApplicationUserManager UserManager, IAuthenticationManager AuthenticationManager)
         {
             if (Users.IsLoggedIn())
             {
@@ -214,7 +228,7 @@ namespace EbayWatcher.BusinessLogic
                 if (StartedAuthenticatingWithEbay())
                 {
                     // Get token from Ebay
-                    var sessionId = Users.GetCurrentUser().EbaySessionId;
+                    var sessionId = Users.GetCurrentSessionId();
                     var client = GetSdkClient();
                     var call = new FetchTokenCall(client);
                     var token = call.FetchToken(sessionId);
@@ -228,10 +242,30 @@ namespace EbayWatcher.BusinessLogic
                     {
                         // Otherwise get the user id of the logged in user from Ebay
                         var userCall = new ConfirmIdentityCall(client);
-                        var userId = userCall.ConfirmIdentity(sessionId).ToLowerOrDefault(); // Always use the lowercase version of the username
+                        var ebayUsername = userCall.ConfirmIdentity(sessionId).ToLowerOrDefault(); // Always use the lowercase version of the username
 
-                        // Set session variables identifying the user
-                        Users.SaveUserEbayToken(token);
+                        // Create user if it doesn't already exist
+                        var user = UserManager.Users.SingleOrDefault(a => a.UserName == ebayUsername);
+                        if (user == null)
+                        {
+                            user = new ApplicationUser()
+                            {
+                                UserName = ebayUsername,
+                                EbaySessionId = sessionId,
+                                EbayToken = token
+                            };
+                            UserManager.Create(user);
+                            var identity = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
+                            AuthenticationManager.SignIn(new AuthenticationProperties { IsPersistent = false }, identity);
+                        }
+                        else
+                        {
+                            var identity = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
+                            AuthenticationManager.SignIn(new AuthenticationProperties { IsPersistent = false }, identity);
+                            user.EbaySessionId = sessionId;
+                            user.EbayToken = token;
+                        }
+
                         return true;
                     }
                 }
