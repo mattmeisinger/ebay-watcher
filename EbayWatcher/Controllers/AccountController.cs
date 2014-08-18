@@ -1,5 +1,4 @@
 ﻿using EbayWatcher.BusinessLogic;
-using EbayWatcher.Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,40 +8,31 @@ using System.Web.Mvc;
 
 namespace EbayWatcher.Controllers
 {
-    [AllowAnonymous]
-    public class AccountController : BaseController
+    public class AccountController : Controller
     {
-        public async Task<ActionResult> Login()
+        public ActionResult Login()
         {
-            if (!Users.IsLoggedIn())
-            {
-                if (await Ebay.IsAuthenticatedWithEbay(UserManager, AuthenticationManager))
-                {
-                    return RedirectToAction("Index", "Wishlist");
-                }
-            }
-            else
+            if (Users.IsLoggedIn())
             {
                 return Content("Already logged in");
             }
-
-            return View();
+            else
+            {
+                return View();
+            }
         }
-
-        public ActionResult Logout()
-        {
-            HttpContext.Session["EbaySessionId"] = null;
-            HttpContext.Session["EbayToken"] = null;
-            HttpContext.GetOwinContext().Authentication.SignOut();
-            return Content("Logged out");
-        }
-
         public ActionResult ToGoEbayLogin()
         {
             var sessionId = Ebay.GetNewSessionId();
             HttpContext.Session["EbaySessionId"] = sessionId;
             var ebayLoginUrl = Ebay.GetLoginUrl(sessionId);
             return Redirect(ebayLoginUrl);
+        }
+
+        public ActionResult Logout()
+        {
+            Users.LogOut();
+            return RedirectToAction("Login");
         }
     }
 }

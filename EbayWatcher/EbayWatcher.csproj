@@ -56,31 +56,7 @@
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AspNet.Identity.Core">
-      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.1.0\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
-      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.1.0\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AspNet.Identity.Owin">
-      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.1.0\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Owin">
-      <HintPath>..\packages\Microsoft.Owin.2.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Host.SystemWeb">
-      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.2.1.0\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Security">
-      <HintPath>..\packages\Microsoft.Owin.Security.2.1.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Security.Cookies">
-      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.2.1.0\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Security.OAuth">
-      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.2.1.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -88,13 +64,12 @@
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.3.1.0.0\lib\net45\NLog.dll</HintPath>
     </Reference>
-    <Reference Include="Owin">
-      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
-    </Reference>
     <Reference Include="SLF">
       <HintPath>..\lib\SLF.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -225,9 +200,24 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="App_Data\ebay-api-keys.json" />
     <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\IdentityConfig.cs" />
-    <Compile Include="App_Start\Startup.Auth.cs" />
     <Content Include="NLog.config" />
+    <EntityDeploy Include="Entities\EbayWatcherContext.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>EbayWatcherContext.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Entities\EbayWatcherContext.edmx.diagram">
+      <DependentUpon>EbayWatcherContext.edmx</DependentUpon>
+    </Content>
+    <Content Include="Entities\EbayWatcherContext.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>EbayWatcherContext.Context.cs</LastGenOutput>
+      <DependentUpon>EbayWatcherContext.edmx</DependentUpon>
+    </Content>
+    <Content Include="Entities\EbayWatcherContext.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>EbayWatcherContext.cs</LastGenOutput>
+      <DependentUpon>EbayWatcherContext.edmx</DependentUpon>
+    </Content>
     <None Include="Properties\PublishProfiles\Production.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -246,15 +236,36 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Migrations\201408090138413_Add identity authentication.cs" />
-    <Compile Include="Migrations\201408090138413_Add identity authentication.Designer.cs">
-      <DependentUpon>201408090138413_Add identity authentication.cs</DependentUpon>
+    <Compile Include="Entities\Category.cs">
+      <DependentUpon>EbayWatcherContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201408091457112_Add full name to Categories.cs" />
-    <Compile Include="Migrations\201408091457112_Add full name to Categories.Designer.cs">
-      <DependentUpon>201408091457112_Add full name to Categories.cs</DependentUpon>
+    <Compile Include="Entities\EbayWatcherContext.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EbayWatcherContext.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="App_Start\Startup.cs" />
+    <Compile Include="Entities\EbayWatcherContext.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EbayWatcherContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\EbayWatcherContext.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EbayWatcherContext.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\User.cs">
+      <DependentUpon>EbayWatcherContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\WishlistItem.cs">
+      <DependentUpon>EbayWatcherContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\WishlistItemHistoricalItem.cs">
+      <DependentUpon>EbayWatcherContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\WishlistItemIgnoreItem.cs">
+      <DependentUpon>EbayWatcherContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="BusinessLogic\AppSettings.cs" />
     <Compile Include="BusinessLogic\Ebay.cs" />
     <Compile Include="BusinessLogic\Exceptions\SettingsFileNotFoundException.cs" />
@@ -264,32 +275,13 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\SetupController.cs" />
     <Compile Include="Controllers\WishlistController.cs" />
-    <Compile Include="Entities\EbayWatcherContext.cs" />
-    <Compile Include="Entities\Models\ApplicationUser.cs" />
-    <Compile Include="Entities\Models\WishlistItemIgnoreItem.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Entities\Models\Category.cs" />
-    <Compile Include="Migrations\201408030023027_Initial.cs" />
-    <Compile Include="Migrations\201408030023027_Initial.Designer.cs">
-      <DependentUpon>201408030023027_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201408160403015_Added attributes to users.cs" />
-    <Compile Include="Migrations\201408160403015_Added attributes to users.Designer.cs">
-      <DependentUpon>201408160403015_Added attributes to users.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201408160405057_Added EbayToken to user profile.cs" />
-    <Compile Include="Migrations\201408160405057_Added EbayToken to user profile.Designer.cs">
-      <DependentUpon>201408160405057_Added EbayToken to user profile.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\EbayCurrentItem.cs" />
     <Compile Include="Models\EbayItem.cs" />
     <Compile Include="Models\EbayCompletedItem.cs" />
     <Compile Include="Models\SuggestedCategory.cs" />
-    <Compile Include="Entities\Models\WishlistItem.cs" />
-    <Compile Include="Entities\Models\WishlistItemHistoricalItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -326,21 +318,7 @@
     <TypeScriptCompile Include="Scripts\typings\kendoui\kendo.all.d.ts" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201408030023027_Initial.resx">
-      <DependentUpon>201408030023027_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201408090138413_Add identity authentication.resx">
-      <DependentUpon>201408090138413_Add identity authentication.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201408091457112_Add full name to Categories.resx">
-      <DependentUpon>201408091457112_Add full name to Categories.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201408160403015_Added attributes to users.resx">
-      <DependentUpon>201408160403015_Added attributes to users.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201408160405057_Added EbayToken to user profile.resx">
-      <DependentUpon>201408160405057_Added EbayToken to user profile.cs</DependentUpon>
-    </EmbeddedResource>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

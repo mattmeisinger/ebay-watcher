@@ -1,4 +1,4 @@
-﻿using EbayWatcher.Entities.Models;
+﻿using EbayWatcher.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

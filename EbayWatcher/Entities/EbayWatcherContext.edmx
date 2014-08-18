@@ -1,0 +1,353 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="EbayWatcherModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Categories">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" />
+          <Property Name="FullName" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EbaySessionId" Type="nvarchar" MaxLength="200" />
+          <Property Name="EbayToken" Type="nvarchar" MaxLength="200" />
+          <Property Name="EbayUsername" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="WishlistItemHistoricalItems">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="WishlistItemId" Type="int" Nullable="false" />
+          <Property Name="EbayId" Type="int" Nullable="false" />
+          <Property Name="BuyItNowPrice" Type="decimal" Precision="6" Scale="2" />
+          <Property Name="AuctionPrice" Type="decimal" Precision="6" Scale="2" />
+          <Property Name="AuctionEndTime" Type="datetime" />
+          <Property Name="BidCount" Type="int" />
+        </EntityType>
+        <EntityType Name="WishlistItemIgnoreItems">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="WishlistItemId" Type="int" Nullable="false" />
+          <Property Name="EbayId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="WishlistItems">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="200" />
+          <Property Name="CategoryId" Type="int" Nullable="false" />
+          <Property Name="Status" Type="nvarchar" MaxLength="50" />
+          <Property Name="Notes" Type="nvarchar(max)" />
+        </EntityType>
+        <Association Name="FK_dbo_WishlistItemHistoricalItems_dbo_WishlistItems_WishlistItemId">
+          <End Role="WishlistItems" Type="Self.WishlistItems" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="WishlistItemHistoricalItems" Type="Self.WishlistItemHistoricalItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WishlistItems">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="WishlistItemHistoricalItems">
+              <PropertyRef Name="WishlistItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_WishlistItemIgnoreItems_dbo_WishlistItems_WishlistItemId">
+          <End Role="WishlistItems" Type="Self.WishlistItems" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="WishlistItemIgnoreItems" Type="Self.WishlistItemIgnoreItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WishlistItems">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="WishlistItemIgnoreItems">
+              <PropertyRef Name="WishlistItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_WishlistItems_dbo_Categories_CategoryId">
+          <End Role="Categories" Type="Self.Categories" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="WishlistItems" Type="Self.WishlistItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="WishlistItems">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_WishlistItems_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="WishlistItems" Type="Self.WishlistItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="WishlistItems">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="EbayWatcherModelStoreContainer">
+          <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WishlistItemHistoricalItems" EntityType="Self.WishlistItemHistoricalItems" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WishlistItemIgnoreItems" EntityType="Self.WishlistItemIgnoreItems" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WishlistItems" EntityType="Self.WishlistItems" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_dbo_WishlistItemHistoricalItems_dbo_WishlistItems_WishlistItemId" Association="Self.FK_dbo_WishlistItemHistoricalItems_dbo_WishlistItems_WishlistItemId">
+            <End Role="WishlistItems" EntitySet="WishlistItems" />
+            <End Role="WishlistItemHistoricalItems" EntitySet="WishlistItemHistoricalItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_WishlistItemIgnoreItems_dbo_WishlistItems_WishlistItemId" Association="Self.FK_dbo_WishlistItemIgnoreItems_dbo_WishlistItems_WishlistItemId">
+            <End Role="WishlistItems" EntitySet="WishlistItems" />
+            <End Role="WishlistItemIgnoreItems" EntitySet="WishlistItemIgnoreItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_WishlistItems_dbo_Categories_CategoryId" Association="Self.FK_dbo_WishlistItems_dbo_Categories_CategoryId">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="WishlistItems" EntitySet="WishlistItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WishlistItems_Users" Association="Self.FK_WishlistItems_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="WishlistItems" EntitySet="WishlistItems" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="EbayWatcherModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FullName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="WishlistItems" Relationship="Self.FK_dbo_WishlistItems_dbo_Categories_CategoryId" FromRole="Categories" ToRole="WishlistItems" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EbaySessionId" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EbayToken" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EbayUsername" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="WishlistItems" Relationship="Self.FK_WishlistItems_Users" FromRole="Users" ToRole="WishlistItems" />
+        </EntityType>
+        <EntityType Name="WishlistItemHistoricalItem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="WishlistItemId" Type="Int32" Nullable="false" />
+          <Property Name="EbayId" Type="Int32" Nullable="false" />
+          <Property Name="BuyItNowPrice" Type="Decimal" Precision="6" Scale="2" />
+          <Property Name="AuctionPrice" Type="Decimal" Precision="6" Scale="2" />
+          <Property Name="AuctionEndTime" Type="DateTime" Precision="3" />
+          <Property Name="BidCount" Type="Int32" />
+          <NavigationProperty Name="WishlistItem" Relationship="Self.FK_dbo_WishlistItemHistoricalItems_dbo_WishlistItems_WishlistItemId" FromRole="WishlistItemHistoricalItems" ToRole="WishlistItems" />
+        </EntityType>
+        <EntityType Name="WishlistItemIgnoreItem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="WishlistItemId" Type="Int32" Nullable="false" />
+          <Property Name="EbayId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="WishlistItem" Relationship="Self.FK_dbo_WishlistItemIgnoreItems_dbo_WishlistItems_WishlistItemId" FromRole="WishlistItemIgnoreItems" ToRole="WishlistItems" />
+        </EntityType>
+        <EntityType Name="WishlistItem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryId" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Category" Relationship="Self.FK_dbo_WishlistItems_dbo_Categories_CategoryId" FromRole="WishlistItems" ToRole="Categories" />
+          <NavigationProperty Name="User" Relationship="Self.FK_WishlistItems_Users" FromRole="WishlistItems" ToRole="Users" />
+          <NavigationProperty Name="WishlistItemHistoricalItems" Relationship="Self.FK_dbo_WishlistItemHistoricalItems_dbo_WishlistItems_WishlistItemId" FromRole="WishlistItems" ToRole="WishlistItemHistoricalItems" />
+          <NavigationProperty Name="WishlistItemIgnoreItems" Relationship="Self.FK_dbo_WishlistItemIgnoreItems_dbo_WishlistItems_WishlistItemId" FromRole="WishlistItems" ToRole="WishlistItemIgnoreItems" />
+        </EntityType>
+        <Association Name="FK_dbo_WishlistItems_dbo_Categories_CategoryId">
+          <End Role="Categories" Type="Self.Category" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="WishlistItems" Type="Self.WishlistItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="WishlistItems">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_WishlistItems_Users">
+          <End Role="Users" Type="Self.User" Multiplicity="1" />
+          <End Role="WishlistItems" Type="Self.WishlistItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="WishlistItems">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_WishlistItemHistoricalItems_dbo_WishlistItems_WishlistItemId">
+          <End Role="WishlistItems" Type="Self.WishlistItem" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="WishlistItemHistoricalItems" Type="Self.WishlistItemHistoricalItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WishlistItems">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="WishlistItemHistoricalItems">
+              <PropertyRef Name="WishlistItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_WishlistItemIgnoreItems_dbo_WishlistItems_WishlistItemId">
+          <End Role="WishlistItems" Type="Self.WishlistItem" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="WishlistItemIgnoreItems" Type="Self.WishlistItemIgnoreItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WishlistItems">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="WishlistItemIgnoreItems">
+              <PropertyRef Name="WishlistItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="EbayWatcherContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Categories" EntityType="Self.Category" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <EntitySet Name="WishlistItemHistoricalItems" EntityType="Self.WishlistItemHistoricalItem" />
+          <EntitySet Name="WishlistItemIgnoreItems" EntityType="Self.WishlistItemIgnoreItem" />
+          <EntitySet Name="WishlistItems" EntityType="Self.WishlistItem" />
+          <AssociationSet Name="FK_dbo_WishlistItems_dbo_Categories_CategoryId" Association="Self.FK_dbo_WishlistItems_dbo_Categories_CategoryId">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="WishlistItems" EntitySet="WishlistItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WishlistItems_Users" Association="Self.FK_WishlistItems_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="WishlistItems" EntitySet="WishlistItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_WishlistItemHistoricalItems_dbo_WishlistItems_WishlistItemId" Association="Self.FK_dbo_WishlistItemHistoricalItems_dbo_WishlistItems_WishlistItemId">
+            <End Role="WishlistItems" EntitySet="WishlistItems" />
+            <End Role="WishlistItemHistoricalItems" EntitySet="WishlistItemHistoricalItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_WishlistItemIgnoreItems_dbo_WishlistItems_WishlistItemId" Association="Self.FK_dbo_WishlistItemIgnoreItems_dbo_WishlistItems_WishlistItemId">
+            <End Role="WishlistItems" EntitySet="WishlistItems" />
+            <End Role="WishlistItemIgnoreItems" EntitySet="WishlistItemIgnoreItems" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="EbayWatcherModelStoreContainer" CdmEntityContainer="EbayWatcherContext">
+          <EntitySetMapping Name="Categories">
+            <EntityTypeMapping TypeName="EbayWatcherModel.Category">
+              <MappingFragment StoreEntitySet="Categories">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="EbayWatcherModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="EbaySessionId" ColumnName="EbaySessionId" />
+                <ScalarProperty Name="EbayToken" ColumnName="EbayToken" />
+                <ScalarProperty Name="EbayUsername" ColumnName="EbayUsername" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WishlistItemHistoricalItems">
+            <EntityTypeMapping TypeName="EbayWatcherModel.WishlistItemHistoricalItem">
+              <MappingFragment StoreEntitySet="WishlistItemHistoricalItems">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="WishlistItemId" ColumnName="WishlistItemId" />
+                <ScalarProperty Name="EbayId" ColumnName="EbayId" />
+                <ScalarProperty Name="BuyItNowPrice" ColumnName="BuyItNowPrice" />
+                <ScalarProperty Name="AuctionPrice" ColumnName="AuctionPrice" />
+                <ScalarProperty Name="AuctionEndTime" ColumnName="AuctionEndTime" />
+                <ScalarProperty Name="BidCount" ColumnName="BidCount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WishlistItemIgnoreItems">
+            <EntityTypeMapping TypeName="EbayWatcherModel.WishlistItemIgnoreItem">
+              <MappingFragment StoreEntitySet="WishlistItemIgnoreItems">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="WishlistItemId" ColumnName="WishlistItemId" />
+                <ScalarProperty Name="EbayId" ColumnName="EbayId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WishlistItems">
+            <EntityTypeMapping TypeName="EbayWatcherModel.WishlistItem">
+              <MappingFragment StoreEntitySet="WishlistItems">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

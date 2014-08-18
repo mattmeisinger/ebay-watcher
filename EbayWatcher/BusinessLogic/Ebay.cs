@@ -4,10 +4,7 @@ using eBay.Service.Core.Soap;
 using eBay.Service.Finding.Finding;
 using eBay.Services;
 using EbayWatcher.Entities;
-using EbayWatcher.Entities.Models;
 using EbayWatcher.Models;
-using Microsoft.Owin.Security;
-using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Threading.Tasks;
+using System.Security.Claims;
 
 namespace EbayWatcher.BusinessLogic
 {
@@ -56,8 +54,10 @@ namespace EbayWatcher.BusinessLogic
             var apiContext = new ApiContext()
             {
                 SoapApiServerUrl = System.Configuration.ConfigurationManager.AppSettings["TradingServerAddress"],
-                ApiCredential = new ApiCredential {
-                    ApiAccount = new ApiAccount {
+                ApiCredential = new ApiCredential
+                {
+                    ApiAccount = new ApiAccount
+                    {
                         Application = AppSettings.Get("AppID"),
                         Developer = AppSettings.Get("DevID"),
                         Certificate = AppSettings.Get("CertID")
@@ -139,10 +139,10 @@ namespace EbayWatcher.BusinessLogic
                 foreach (var a in categories.Cast<SuggestedCategoryType>())
                 {
                     // Build list of parent categories
-                    var parents = new List<Entities.Models.Category>();
+                    var parents = new List<Entities.Category>();
                     for (int i = 0; i < a.Category.CategoryParentID.Count; i++)
                     {
-                        var category = new Entities.Models.Category
+                        var category = new Entities.Category
                         {
                             Id = a.Category.CategoryParentID[i].ToIntOrDefault().Value,
                             Name = a.Category.CategoryParentName[i]
@@ -172,7 +172,7 @@ namespace EbayWatcher.BusinessLogic
 
                 // Add any categories that don't exist yet to the database
                 var categoryIdsInDatabase = context.Categories.Select(a => a.Id).ToList();
-                var ebayQueryResults = suggestedCategories.Select(a => a as Entities.Models.Category).Union(suggestedCategories.SelectMany(a => a.Parents)).ToArray();
+                var ebayQueryResults = suggestedCategories.Select(a => a as Entities.Category).Union(suggestedCategories.SelectMany(a => a.Parents)).ToArray();
                 foreach (var item in ebayQueryResults)
                 {
                     if (!categoryIdsInDatabase.Contains(item.Id))
@@ -200,78 +200,44 @@ namespace EbayWatcher.BusinessLogic
         //    }
         //}
 
-        internal static bool StartedAuthenticatingWithEbay()
+        internal static bool CompleteEbayAuthentication()
         {
-            // If SessionId has already been sent, then that means the user has already been
-            // sent to the login page.
+            using (var context = new EbayWatcherContext())
+            {
+                // Get token from Ebay
+                var sessionId = Users.GetCurrentSessionId();
+                var client = GetSdkClient();
+                var call = new FetchTokenCall(client);
+                var token = call.FetchToken(sessionId);
 
-            if (Users.IsLoggedIn())
-            {
-                var user = Users.GetCurrentUser();
-                return !user.EbaySessionId.IsNullOrWhiteSpace();
-            }
-            else
-            {
-                return !HttpContext.Current.Session["EbaySessionId"].ToStringOrDefault().IsNullOrWhiteSpace();
-            }
-        }
-
-        internal static async Task<bool> IsAuthenticatedWithEbay(ApplicationUserManager UserManager, IAuthenticationManager AuthenticationManager)
-        {
-            if (Users.IsLoggedIn())
-            {
-                return true;
-            }
-            else
-            {
-                // If they started the login process, check if they completed and a token is waiting.
-                if (StartedAuthenticatingWithEbay())
+                // If the token comes back empty, that means they didn't complete the sign-in process.
+                if (token.IsNullOrWhiteSpace())
                 {
-                    // Get token from Ebay
-                    var sessionId = Users.GetCurrentSessionId();
-                    var client = GetSdkClient();
-                    var call = new FetchTokenCall(client);
-                    var token = call.FetchToken(sessionId);
-
-                    // If the token comes back empty, that means they didn't complete the sign-in process.
-                    if (token.IsNullOrWhiteSpace())
-                    {
-                        return false;
-                    }
-                    else
-                    {
-                        // Otherwise get the user id of the logged in user from Ebay
-                        var userCall = new ConfirmIdentityCall(client);
-                        var ebayUsername = userCall.ConfirmIdentity(sessionId).ToLowerOrDefault(); // Always use the lowercase version of the username
-
-                        // Create user if it doesn't already exist
-                        var user = UserManager.Users.SingleOrDefault(a => a.UserName == ebayUsername);
-                        if (user == null)
-                        {
-                            user = new ApplicationUser()
-                            {
-                                UserName = ebayUsername,
-                                EbaySessionId = sessionId,
-                                EbayToken = token
-                            };
-                            UserManager.Create(user);
-                            var identity = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
-                            AuthenticationManager.SignIn(new AuthenticationProperties { IsPersistent = false }, identity);
-                        }
-                        else
-                        {
-                            var identity = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
-                            AuthenticationManager.SignIn(new AuthenticationProperties { IsPersistent = false }, identity);
-                            user.EbaySessionId = sessionId;
-                            user.EbayToken = token;
-                        }
-
-                        return true;
-                    }
+                    return false;
                 }
                 else
                 {
-                    return false;
+                    // Otherwise get the user id of the logged in user from Ebay
+                    var userCall = new ConfirmIdentityCall(client);
+                    var ebayUsername = userCall.ConfirmIdentity(sessionId).ToLowerOrDefault(); // Always use the lowercase version of the username
+
+                    // Create user if it doesn't already exist
+                    var user = context.Users.SingleOrDefault(a => a.EbayUsername == ebayUsername);
+                    if (user == null)
+                    {
+                        user = new User()
+                        {
+                            EbayUsername = ebayUsername
+                        };
+                        context.Users.Add(user);
+                    }
+
+                    user.EbaySessionId = sessionId;
+                    user.EbayToken = token;
+
+                    context.SaveChanges();
+
+                    return true;
                 }
             }
         }

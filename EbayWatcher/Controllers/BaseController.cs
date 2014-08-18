@@ -1,63 +1,41 @@
 ﻿using EbayWatcher.BusinessLogic;
 using EbayWatcher.Entities;
-using EbayWatcher.Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
-using Microsoft.AspNet.Identity;
 
 namespace EbayWatcher.Controllers
 {
-    public abstract class BaseController : Controller
+    public abstract class AuthenticatedController : Controller
     {
-        private ApplicationUserManager _userManager;
-        public ApplicationUserManager UserManager
-        {
-            get
-            {
-                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            }
-            private set
-            {
-                _userManager = value;
-            }
-        }
-        public IAuthenticationManager AuthenticationManager
-        {
-            get
-            {
-                return HttpContext.GetOwinContext().Authentication;
-            }
-        }
-
-        public BaseController()
-        {
-        }
-
-        public BaseController(ApplicationUserManager userManager)
-        {
-            UserManager = userManager;
-        }
-
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-
-
-            //if (!BusinessLogic.Ebay.ApiSettingsValid())
-            //{
-            //    filterContext.Result = RedirectToAction("Index", "Setup");
-            //    return;
-            //}
-
-            // Don't need to require login yet, since we're just using the search
-            //if (!BusinessLogic.Users.IsLoggedIn())
-            //{
-            //    filterContext.Result = RedirectToAction("Index", "Login");
-            //}
+            // If user isn't logged in, see if they are on the second step of ebay authentication
+            if (Session["Username"].ToStringOrDefault().IsNullOrWhiteSpace())
+            {
+                // If they are on the second stage of ebay authentication, see if it is complete
+                if (Session["SessionId"].ToStringOrDefault() != null)
+                {
+                    if (Ebay.CompleteEbayAuthentication())
+                    {
+                        // Do nothing. The authentication is complete so they can see any page now.
+                    }
+                    else
+                    {
+                        filterContext.Result = RedirectToAction("Login", "Account");
+                    }
+                }
+                else
+                {
+                    filterContext.Result = RedirectToAction("Login", "Account");
+                }
+            }
+            else
+            {
+                // Do nothing.  The user is already logged in.
+            }
 
             base.OnActionExecuting(filterContext);
         }

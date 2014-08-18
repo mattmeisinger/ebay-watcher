@@ -10,7 +10,6 @@ namespace EbayWatcher.Controllers
     public class HomeController : Controller
     {
         // GET: Home
-        [Authorize]
         public ActionResult Index()
         {
             return RedirectToAction("Index", "Wishlist");

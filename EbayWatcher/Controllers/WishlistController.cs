@@ -1,6 +1,5 @@
 ﻿using EbayWatcher.BusinessLogic;
 using EbayWatcher.Entities;
-using EbayWatcher.Entities.Models;
 using EbayWatcher.Models;
 using System;
 using System.Collections.Generic;
@@ -10,24 +9,12 @@ using System.Web.Mvc;
 
 namespace EbayWatcher.Controllers
 {
-    public class WishlistController : BaseController
+    public class WishlistController : AuthenticatedController
     {
-        [Authorize]
         public ActionResult Index()
         {
-            var auth = HttpContext.GetOwinContext().Authentication;
             using (var context = new EbayWatcherContext())
             {
-                //if (!context.WishlistItems.Any())
-                //{
-                //    context.WishlistItems.Add(new WishlistItem
-                //    {
-                //        UserId = EbayWatcher.BusinessLogic.Users.GetCurrentUserId(),
-                //        Status = "Need",
-                //        Name = "1"
-                //    });
-                //    context.SaveChanges();
-                //}
                 return View(context.WishlistItems.ToArray());
             }
         }
@@ -54,7 +41,7 @@ namespace EbayWatcher.Controllers
                 {
                     s = new WishlistItem
                     {
-                        UserId = EbayWatcher.BusinessLogic.Users.GetCurrentUsername()
+                        UserId = EbayWatcher.BusinessLogic.Users.GetCurrentUser().Id
                     };
                     context.WishlistItems.Add(s);
                 }
