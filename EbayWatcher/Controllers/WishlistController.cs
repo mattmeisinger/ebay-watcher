@@ -62,17 +62,17 @@ namespace EbayWatcher.Controllers
             }
         }
 
-        public ActionResult ViewEnded(int id)
+        public ActionResult _FindEnded(int id)
         {
             using (var context = new EbayWatcherContext())
             {
                 var item = context.WishlistItems.Single(a => a.Id == id);
                 var completedItems = Ebay.GetCompletedItems(item.Name, item.CategoryId);
-                return View(completedItems);
+                return PartialView(completedItems);
             }
         }
 
-        public ActionResult ViewCurrent(int id)
+        public ActionResult _FindCurrent(int id)
         {
             using (var context = new EbayWatcherContext())
             {

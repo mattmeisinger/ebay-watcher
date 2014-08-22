@@ -301,7 +301,7 @@
     <Content Include="Views\Wishlist\Index.cshtml" />
     <Content Include="Views\Wishlist\Edit.cshtml" />
     <Content Include="Scripts\jquery-2.1.1.min.map" />
-    <Content Include="Views\Wishlist\ViewEnded.cshtml" />
+    <Content Include="Views\Wishlist\_FindEnded.cshtml" />
     <Content Include="Views\Setup\Index.cshtml" />
     <Content Include="Views\Wishlist\_FindCategory.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
@@ -316,6 +316,7 @@
     <Folder Include="Views\Home\" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Scripts\EbayWatcher\SelectEbayItems.ts" />
     <TypeScriptCompile Include="Scripts\EbayWatcher\FindCategory.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\kendoui\kendo.all.d.ts" />

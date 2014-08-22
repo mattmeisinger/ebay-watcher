@@ -27,8 +27,8 @@
                 <td>@item.Status</td>
                 <td>@item.Notes</td>
                 <td>
-                    @Html.ActionLink("View Ended", "ViewEnded", new { id = item.Id }, new { target = "_blank" })
-                    @Html.ActionLink("View Current", "ViewCurrent", new { id = item.Id }, new { target = "_blank" })
+                    @Html.ActionLink("View Ended", "_FindEnded", new { id = item.Id }, new { target = "_blank", @class = "find-ebay-items" })
+                    @Html.ActionLink("View Current", "_FindCurrent", new { id = item.Id }, new { target = "_blank", @class = "find-ebay-items" })
                 </td>
             </tr>
         }
