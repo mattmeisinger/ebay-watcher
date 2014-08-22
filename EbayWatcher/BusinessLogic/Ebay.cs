@@ -85,19 +85,29 @@ namespace EbayWatcher.BusinessLogic
         }
         #endregion
 
-        public static string[] GetCompletedItems(string keyword, string category)
+        public static EbayCompletedItem[] GetCompletedItems(string keyword, int categoryId)
         {
             var ret = GetFindingClient().findCompletedItems(new FindCompletedItemsRequest
             {
                 keywords = keyword,
-                //categoryId = new[] { "" }
+                categoryId = new[] { categoryId.ToString() }
             });
 
-            if (ret.errorMessage.Any())
+            if (ret.errorMessage != null && ret.errorMessage.Any())
                 throw new Exception(string.Join(Environment.NewLine, ret.errorMessage.Select(a => a.message)));
 
             return ret.searchResult.item
-                .Select(a => a.itemId)
+                .Select(a => new EbayCompletedItem
+                {
+                    Id = a.itemId,
+                    Name = a.title,
+                    Url = a.viewItemURL,
+                    ImageUrl = a.galleryURL,
+                    AuctionEndTime = a.listingInfo.endTime,
+                    AuctionPrice = a.sellingStatus.convertedCurrentPrice == null ? (double?)null : a.sellingStatus.convertedCurrentPrice.Value,
+                    BidCount = a.sellingStatus.bidCount,
+                    BuyItNowPrice = a.listingInfo.buyItNowAvailable ? a.listingInfo.buyItNowPrice.Value : (double?)null,
+                })
                 .ToArray();
         }
 
@@ -125,7 +135,7 @@ namespace EbayWatcher.BusinessLogic
                 .ToArray();
         }
 
-        internal static SuggestedCategory[] FindCategories(string searchTerm)
+        internal static CategoryListItem[] FindCategories(string searchTerm)
         {
             // Get suggested categories from Ebay
             using (var context = new EbayWatcherContext())
@@ -135,7 +145,7 @@ namespace EbayWatcher.BusinessLogic
                 var categories = req.GetSuggestedCategories(searchTerm);
 
                 // Convert into POCO objects
-                var suggestedCategories = new List<SuggestedCategory>();
+                var ret = new List<CategoryListItem>();
                 foreach (var a in categories.Cast<SuggestedCategoryType>())
                 {
                     // Build list of parent categories
@@ -162,18 +172,26 @@ namespace EbayWatcher.BusinessLogic
                     fullCategoryName.Append(a.Category.CategoryName);
 
                     // Create new category
-                    var newItem = new SuggestedCategory();
+                    var newItem = new Entities.Category();
                     newItem.Id = a.Category.CategoryID.ToIntOrDefault().Value;
                     newItem.Name = a.Category.CategoryName;
-                    newItem.Parents = parents.ToArray();
                     newItem.FullName = fullCategoryName.ToString();
-                    suggestedCategories.Add(newItem);
+                    ret.Add(new CategoryListItem
+                    {
+                        Item = new Entities.Category
+                        {
+                            Id = a.Category.CategoryID.ToIntOrDefault().Value,
+                            Name = a.Category.CategoryName,
+                            FullName = fullCategoryName.ToString()
+                        },
+                        Parents = parents.ToArray()
+                    });
                 }
 
                 // Add any categories that don't exist yet to the database
                 var categoryIdsInDatabase = context.Categories.Select(a => a.Id).ToList();
-                var ebayQueryResults = suggestedCategories.Select(a => a as Entities.Category).Union(suggestedCategories.SelectMany(a => a.Parents)).ToArray();
-                foreach (var item in ebayQueryResults)
+                var allQueryCategoryResults = ret.Select(a => a.Item).Union(ret.SelectMany(a => a.Parents)).ToArray();
+                foreach (var item in allQueryCategoryResults)
                 {
                     if (!categoryIdsInDatabase.Contains(item.Id))
                     {
@@ -182,8 +200,7 @@ namespace EbayWatcher.BusinessLogic
                     }
                 }
                 context.SaveChanges();
-
-                return suggestedCategories.ToArray();
+                return ret.ToArray();
             }
         }
 
@@ -235,7 +252,14 @@ namespace EbayWatcher.BusinessLogic
                     user.EbaySessionId = sessionId;
                     user.EbayToken = token;
 
+                    if (context.GetValidationErrors().Any())
+                        throw new Exception(string.Join(Environment.NewLine, context.GetValidationErrors().SelectMany(a => a.ValidationErrors).Select(a => a.PropertyName + ": " + a.ErrorMessage)));
+
                     context.SaveChanges();
+
+                    HttpContext.Current.Session["EbaySessionId"] = sessionId;
+                    HttpContext.Current.Session["EbayToken"] = token;
+                    HttpContext.Current.Session["EbayUsername"] = ebayUsername;
 
                     return true;
                 }

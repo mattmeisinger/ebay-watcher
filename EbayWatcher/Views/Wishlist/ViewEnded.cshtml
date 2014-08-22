@@ -1,4 +1,4 @@
-﻿@model EbayWatcher.Entities.Models.WishlistItemHistoricalItem[]
+﻿@model EbayWatcher.Models.EbayCompletedItem[]
 
 @{
     ViewBag.Title = "Index";
@@ -9,26 +9,24 @@
 <table class="table">
     <thead>
         <tr>
-            <th></th>
+            <th>Id</th>
             <th>Name</th>
-            <th>Category</th>
-            <th>Status</th>
-            <th>Notes</th>
-            <th></th>
+            <th>Auction Price</th>
+            <th>Auction End Time</th>
+            <th>Bids</th>
+            <th>Buy it Now</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
             <tr>
-                <td>@Html.ActionLink(item.Name, "Edit", new { Id = item.Id })</td>
-                <td>@item.Category</td>
-                <td>@item.Status</td>
-                <td>@item.Notes</td>
-                <td>
-                    @Html.ActionLink("ViewEnded", "View Ended", new { id = item.Id }, new { target = "_blank" })
-                    @Html.ActionLink("ViewCurrent", "View Current", new { id = item.Id }, new { target = "_blank" })
-                </td>
+                <td><a href="@item.Url" target="_blank"><img src="@item.ImageUrl" alt="@item.Name" /></a></td>
+                <td>@item.Name</td>
+                <td>@item.AuctionPrice</td>
+                <td>@item.AuctionEndTime</td>
+                <td>@item.BidCount</td>
+                <td>@item.BuyItNowPrice</td>
             </tr>
         }
     </tbody>

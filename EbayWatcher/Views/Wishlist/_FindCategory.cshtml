@@ -1,4 +1,4 @@
-﻿@model EbayWatcher.Models.SuggestedCategory[]
+﻿@model EbayWatcher.Models.CategoryListItem[]
 
 <form method="post" id="findCategoryForm">
     @*@Html.Label("SearchTerm", "Search for:")
@@ -17,7 +17,7 @@
                     <a href="#" class="ebay-category" data-id="@parentItem.Id" data-fullname="@parentItem.FullName">@parentItem.Name</a>
                     <text> > </text>
                 }
-                <a href="#" class="ebay-category" data-id="@item.Id" data-fullname="@item.FullName">@item.Name</a>
+                <a href="#" class="ebay-category" data-id="@item.Item.Id" data-fullname="@item.Item.FullName">@item.Item.Name</a>
             </div>
         }
     }

@@ -13,12 +13,13 @@ namespace EbayWatcher.Controllers
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             // If user isn't logged in, see if they are on the second step of ebay authentication
-            if (Session["Username"].ToStringOrDefault().IsNullOrWhiteSpace())
+            if (!Users.IsLoggedIn())
             {
                 // If they are on the second stage of ebay authentication, see if it is complete
-                if (Session["SessionId"].ToStringOrDefault() != null)
+                if (Users.GetCurrentSessionId() != null)
                 {
-                    if (Ebay.CompleteEbayAuthentication())
+                    var authenticationDidSucceed = Ebay.CompleteEbayAuthentication();
+                    if (authenticationDidSucceed)
                     {
                         // Do nothing. The authentication is complete so they can see any page now.
                     }

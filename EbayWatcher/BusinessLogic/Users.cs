@@ -8,25 +8,21 @@ namespace EbayWatcher.BusinessLogic
 {
     public class Users
     {
-        internal static void LogIn(string ebayUsername)
-        {
-            HttpContext.Current.Session["Username"] = ebayUsername;
-        }
         internal static void LogOut()
         {
-            HttpContext.Current.Session["Username"] = null;
+            HttpContext.Current.Session["EbayUsername"] = null;
             HttpContext.Current.Session["EbaySessionId"] = null;
             HttpContext.Current.Session["EbayToken"] = null;
         }
 
         public static bool IsLoggedIn()
         {
-            return GetCurrentUser() != null;
+            return !GetCurrentUsername().IsNullOrWhiteSpace();
         }
 
         public static string GetCurrentUsername()
         {
-            return HttpContext.Current.Session["Username"].ToStringOrDefault();
+            return HttpContext.Current.Session["EbayUsername"].ToStringOrDefault();
         }
         internal static string GetCurrentSessionId()
         {

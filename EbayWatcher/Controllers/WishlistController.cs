@@ -15,7 +15,7 @@ namespace EbayWatcher.Controllers
         {
             using (var context = new EbayWatcherContext())
             {
-                return View(context.WishlistItems.ToArray());
+                return View(context.WishlistItems.ToArray().Select(a => Converters.WishlistItemConverter.Convert(a)).ToArray());
             }
         }
 
@@ -27,19 +27,19 @@ namespace EbayWatcher.Controllers
                 if (Id.HasValue)
                     return View(context.WishlistItems.Single(a => a.Id == Id));
                 else
-                    return View(new WishlistItem { });
+                    return View(new Entities.WishlistItem { });
             }
         }
 
         [HttpPost]
-        public ActionResult Edit(WishlistItem o)
+        public ActionResult Edit(Entities.WishlistItem o)
         {
             using (var context = new EbayWatcherContext())
             {
-                WishlistItem s = null;
+                Entities.WishlistItem s = null;
                 if (o.Id == 0)
                 {
-                    s = new WishlistItem
+                    s = new Entities.WishlistItem
                     {
                         UserId = EbayWatcher.BusinessLogic.Users.GetCurrentUser().Id
                     };
@@ -67,8 +67,8 @@ namespace EbayWatcher.Controllers
             using (var context = new EbayWatcherContext())
             {
                 var item = context.WishlistItems.Single(a => a.Id == id);
-                var completedItems = Ebay.GetCompletedItems(item.Name, "261");
-                return Content("success");
+                var completedItems = Ebay.GetCompletedItems(item.Name, item.CategoryId);
+                return View(completedItems);
             }
         }
 
@@ -82,7 +82,7 @@ namespace EbayWatcher.Controllers
             }
         }
 
-        [HttpPost]
+        //[HttpPost]
         public ActionResult _FindCategory(string searchTerm)
         {
             ViewBag.SearchTerm = searchTerm;

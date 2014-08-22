@@ -1,4 +1,4 @@
-﻿@model EbayWatcher.Entities.Models.WishlistItem[]
+﻿@model EbayWatcher.Models.WishlistItem[]
 
 @{
     ViewBag.Title = "Index";
@@ -23,7 +23,7 @@
         {
             <tr>
                 <td>@Html.ActionLink(item.Name, "Edit", new { Id = item.Id })</td>
-                <td>@item.Category</td>
+                <td>@item.CategoryFullName</td>
                 <td>@item.Status</td>
                 <td>@item.Notes</td>
                 <td>
