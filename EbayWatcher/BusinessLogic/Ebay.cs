@@ -7,12 +7,9 @@ using EbayWatcher.Entities;
 using EbayWatcher.Models;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Web;
-using System.Threading.Tasks;
-using System.Security.Claims;
 
 namespace EbayWatcher.BusinessLogic
 {
@@ -85,6 +82,7 @@ namespace EbayWatcher.BusinessLogic
         }
         #endregion
 
+        #region Data Calls
         public static EbayCompletedItem[] GetCompletedItems(string keyword, int categoryId)
         {
             var ret = GetFindingClient().findCompletedItems(new FindCompletedItemsRequest
@@ -110,7 +108,6 @@ namespace EbayWatcher.BusinessLogic
                 })
                 .ToArray();
         }
-
         public static EbayCurrentItem[] GetCurrentItems(string keyword, int categoryId)
         {
             var context = GetFindingClient();
@@ -134,7 +131,6 @@ namespace EbayWatcher.BusinessLogic
                 })
                 .ToArray();
         }
-
         internal static CategoryListItem[] FindCategories(string searchTerm)
         {
             // Get suggested categories from Ebay
@@ -203,20 +199,6 @@ namespace EbayWatcher.BusinessLogic
                 return ret.ToArray();
             }
         }
-
-        //internal static void GetCategories()
-        //{
-        //    var context = GetSdkClient();
-        //    var req = new GetCategoriesCall(context);
-        //    req.ViewAllNodes = true;
-        //    req.DetailLevelList.Add(eBay.Service.Core.Soap.DetailLevelCodeType.ReturnAll);
-        //    var categories = req.GetCategories();
-        //    foreach (CategoryType item in categories)
-        //    {
-        //        System.Diagnostics.Debug.WriteLine(item);
-        //    }
-        //}
-
         internal static bool CompleteEbayAuthentication()
         {
             using (var context = new EbayWatcherContext())
@@ -265,5 +247,6 @@ namespace EbayWatcher.BusinessLogic
                 }
             }
         }
+        #endregion
     }
 }
