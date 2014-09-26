@@ -37,7 +37,9 @@
     </div>
 
     <div class="container body-content">
-        @RenderBody()
+        <div ng-app="ebayWatcherApp">
+            @RenderBody()
+        </div>
         <hr />
         <footer>
             <p>&copy; @DateTime.Now.Year - Ebay Watcher</p>

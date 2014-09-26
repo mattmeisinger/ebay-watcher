@@ -1,12 +1,7 @@
-﻿@model EbayWatcher.Models.WishlistItem[]
-
-@{
-    ViewBag.Title = "Index";
-}
-
+﻿
 <h2>Wishlist</h2>
 
-@Html.ActionLink("New Item", "Edit", "Wishlist", null, new { @class = "btn btn-primary" })
+<a href="" ng-click="editWishlistItem()" class="btn btn-primary">New Item</a>
 
 <table class="table">
     <thead>
@@ -19,18 +14,17 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@Html.ActionLink(item.Name, "Edit", new { Id = item.Id })</td>
-                <td>@item.CategoryFullName</td>
-                <td>@item.Status</td>
-                <td>@item.Notes</td>
-                <td>
-                    @Html.ActionLink("View Ended", "_FindEnded", new { id = item.Id }, new { target = "_blank", @class = "find-ebay-items" })
-                    @Html.ActionLink("View Current", "_FindCurrent", new { id = item.Id }, new { target = "_blank", @class = "find-ebay-items" })
-                </td>
-            </tr>
-        }
+        <tr ng-repeat="item in WishlistItems">
+            <td>
+                <a href="" ng-click="editWishlistItem(item.id)">Edit</a>
+            </td>
+            <td ng-bind="item.Category"></td>
+            <td ng-bind="item.Status"></td>
+            <td ng-bind="item.Notes"></td>
+            <td>
+                <a href="" ng-click="findEnded(item.id)">Edit</a>
+                <a href="" ng-click="findCurrent(item.id)">Edit</a>
+            </td>
+        </tr>
     </tbody>
 </table>

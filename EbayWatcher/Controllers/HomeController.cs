@@ -12,7 +12,7 @@ namespace EbayWatcher.Controllers
         // GET: Home
         public ActionResult Index()
         {
-            return RedirectToAction("Index", "Wishlist");
+            return PartialView();
         }
     }
 }

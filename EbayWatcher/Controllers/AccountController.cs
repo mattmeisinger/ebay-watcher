@@ -21,14 +21,13 @@ namespace EbayWatcher.Controllers
                 return View();
             }
         }
-        public ActionResult ToGoEbayLogin()
+        public ActionResult GoToEbayLogin()
         {
             var sessionId = Ebay.GetNewSessionId();
             HttpContext.Session["EbaySessionId"] = sessionId;
             var ebayLoginUrl = Ebay.GetLoginUrl(sessionId);
             return Redirect(ebayLoginUrl);
         }
-
         public ActionResult Logout()
         {
             Users.LogOut();
