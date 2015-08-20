@@ -1,37 +1,28 @@
-﻿using EbayWatcher.BusinessLogic;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using EbayAPIHelper;
+using EbayWatcher.BusinessLogic;
 
 namespace EbayWatcher.Controllers
 {
     public class AccountController : Controller
     {
-        public ActionResult Login()
+        public JsonResult GetStatus()
         {
-            if (Users.IsLoggedIn())
+            return Json(new
             {
-                return Content("Already logged in");
-            }
-            else
-            {
-                return View();
-            }
+                LoggedIn = Users.IsLoggedIn()
+            });
         }
-        public ActionResult GoToEbayLogin()
-        {
-            var sessionId = Ebay.GetNewSessionId();
-            HttpContext.Session["EbaySessionId"] = sessionId;
-            var ebayLoginUrl = Ebay.GetLoginUrl(sessionId);
-            return Redirect(ebayLoginUrl);
-        }
-        public ActionResult Logout()
+
+        public JsonResult NewAuthRequest() => Json(EbayAuth.CreateNewAuthRequest());
+        public JsonResult LogOut()
         {
             Users.LogOut();
-            return RedirectToAction("Login");
+            return Success();
         }
     }
 }

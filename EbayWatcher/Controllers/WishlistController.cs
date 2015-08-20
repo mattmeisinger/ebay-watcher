@@ -15,7 +15,10 @@ namespace EbayWatcher.Controllers
         {
             using (var context = new EbayWatcherContext())
             {
-                return View(context.WishlistItems.ToArray().Select(a => Converters.WishlistItemConverter.Convert(a)).ToArray());
+                var data = context.WishlistItems.ToArray()
+                    .Select(a => Converters.WishlistItemConverter.Convert(a))
+                    .ToArray();
+                return View(data);
             }
         }
 
@@ -82,7 +85,6 @@ namespace EbayWatcher.Controllers
             }
         }
 
-        //[HttpPost]
         public ActionResult _FindCategory(string searchTerm)
         {
             ViewBag.SearchTerm = searchTerm;

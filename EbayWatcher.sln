@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EbayWatcher", "EbayWatcher\EbayWatcher.csproj", "{5E38792B-CFCE-4A9D-9402-BF0E8FA5FAAC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EbayWatcherTest", "EbayWatcherTest\EbayWatcherTest.csproj", "{34069EF1-6B97-4D31-BE4F-DEA78A2BED27}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EbayAPIHelper", "EbayAPIHelper\EbayAPIHelper.csproj", "{AB6BD2FC-CA45-44DC-AE4A-97FE283C8B68}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{5E38792B-CFCE-4A9D-9402-BF0E8FA5FAAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E38792B-CFCE-4A9D-9402-BF0E8FA5FAAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E38792B-CFCE-4A9D-9402-BF0E8FA5FAAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34069EF1-6B97-4D31-BE4F-DEA78A2BED27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34069EF1-6B97-4D31-BE4F-DEA78A2BED27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34069EF1-6B97-4D31-BE4F-DEA78A2BED27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34069EF1-6B97-4D31-BE4F-DEA78A2BED27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB6BD2FC-CA45-44DC-AE4A-97FE283C8B68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB6BD2FC-CA45-44DC-AE4A-97FE283C8B68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB6BD2FC-CA45-44DC-AE4A-97FE283C8B68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB6BD2FC-CA45-44DC-AE4A-97FE283C8B68}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

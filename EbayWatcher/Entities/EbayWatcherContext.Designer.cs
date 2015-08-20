@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\Matt\Documents\Visual Studio 2013\Projects\StampFinder\EbayWatcher\Entities\EbayWatcherContext.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\projects\EbayWatcher\EbayWatcher\Entities\EbayWatcherContext.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

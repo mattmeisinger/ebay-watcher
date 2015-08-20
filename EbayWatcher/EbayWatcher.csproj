@@ -14,7 +14,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>EbayWatcher</RootNamespace>
     <AssemblyName>EbayWatcher</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -22,6 +22,7 @@
     <IISExpressUseClassicPipelineMode />
     <TypeScriptToolsVersion>1.0</TypeScriptToolsVersion>
     <TargetFrameworkProfile />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -45,8 +46,9 @@
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="eBay.Service">
-      <HintPath>..\lib\eBay.Service.dll</HintPath>
+    <Reference Include="eBay.Service, Version=3.921.0.0, Culture=neutral, PublicKeyToken=1d9d786a5932eaf0, processorArchitecture=MSIL">
+      <HintPath>..\packages\eBay.3.921.0\lib\net40\eBay.Service.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="eBay.Service.Finding">
       <HintPath>..\lib\eBay.Service.Finding.dll</HintPath>
@@ -315,7 +317,12 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\EbayAPIHelper\EbayAPIHelper.csproj">
+      <Project>{ab6bd2fc-ca45-44dc-ae4a-97fe283c8b68}</Project>
+      <Name>EbayAPIHelper</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\controllers.ts" />
     <TypeScriptCompile Include="Scripts\EbayWatcher\SelectEbayItems.ts" />

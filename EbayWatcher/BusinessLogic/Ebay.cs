@@ -3,6 +3,7 @@ using eBay.Service.Core.Sdk;
 using eBay.Service.Core.Soap;
 using eBay.Service.Finding.Finding;
 using eBay.Services;
+using EbayAPIHelper;
 using EbayWatcher.Entities;
 using EbayWatcher.Models;
 using System;
@@ -18,67 +19,15 @@ namespace EbayWatcher.BusinessLogic
         private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
 
         #region Client Setup
-        private static bool apiSettingsLoaded = false;
-        public static bool ApiSettingsValid()
-        {
-            if (apiSettingsLoaded)
-            {
-                return true;
-            }
-
-            if (string.IsNullOrWhiteSpace(AppSettings.Get("DevID")) || string.IsNullOrWhiteSpace(AppSettings.Get("AppID")))
-            {
-                return false;
-            }
-            else
-            {
-                apiSettingsLoaded = true;
-                return true;
-            }
-        }
         public static FindingServicePortTypeClient GetFindingClient()
         {
             ClientConfig config = new ClientConfig
             {
-                EndPointAddress = System.Configuration.ConfigurationManager.AppSettings["FindingServerAddress"],// Initialize service end-point configration
-                ApplicationId = AppSettings.Get("AppID") // set eBay developer account AppID
+                EndPointAddress = EbaySettings.FindingServerAddress,// Initialize service end-point configration
+                ApplicationId = EbaySettings.AppID // set eBay developer account AppID
             };
 
             return FindingServiceClientFactory.getServiceClient(config);
-        }
-        public static ApiContext GetSdkClient()
-        {
-            var apiContext = new ApiContext()
-            {
-                SoapApiServerUrl = System.Configuration.ConfigurationManager.AppSettings["TradingServerAddress"],
-                ApiCredential = new ApiCredential
-                {
-                    ApiAccount = new ApiAccount
-                    {
-                        Application = AppSettings.Get("AppID"),
-                        Developer = AppSettings.Get("DevID"),
-                        Certificate = AppSettings.Get("CertID")
-                    },
-                    eBayToken = AppSettings.Get("EBayToken")
-                },
-                Site = eBay.Service.Core.Soap.SiteCodeType.US
-            };
-
-            return apiContext;
-        }
-        internal static string GetNewSessionId()
-        {
-            var ruName = AppSettings.Get("RuName");
-            var client = GetSdkClient();
-            var call = new GetSessionIDCall(client);
-            var sessionId = call.GetSessionID(ruName);
-            return sessionId;
-        }
-        internal static string GetLoginUrl(string sessionId)
-        {
-            var ruName = AppSettings.Get("RuName");
-            var urlEncodedSessionID = HttpUtility.UrlEncode(sessionId);
-            return string.Format("https://signin.ebay.com/ws/eBayISAPI.dll?SignIn&runame={0}&SessID={1}", ruName, urlEncodedSessionID);
         }
         #endregion
 
@@ -131,18 +80,16 @@ namespace EbayWatcher.BusinessLogic
                 })
                 .ToArray();
         }
-        internal static CategoryListItem[] FindCategories(string searchTerm)
+        public static CategoryListItem[] FindCategories(string searchTerm)
         {
             // Get suggested categories from Ebay
             using (var context = new EbayWatcherContext())
             {
-                var client = GetSdkClient();
-                var req = new GetSuggestedCategoriesCall(client);
-                var categories = req.GetSuggestedCategories(searchTerm);
+                var categories = EbayClientHelper.FindCategories(searchTerm);
 
                 // Convert into POCO objects
                 var ret = new List<CategoryListItem>();
-                foreach (var a in categories.Cast<SuggestedCategoryType>())
+                foreach (var a in categories)
                 {
                     // Build list of parent categories
                     var parents = new List<Entities.Category>();
@@ -199,52 +146,37 @@ namespace EbayWatcher.BusinessLogic
                 return ret.ToArray();
             }
         }
-        internal static bool CompleteEbayAuthentication()
+        public static bool CompleteEbayAuthentication()
         {
+            var sessionId = Users.GetCurrentSessionId();
+            var authorization = EbayAuth.CompleteEbayAuthentication(sessionId);
+            if (authorization == null)
+                return false; // The authorization hasn't gone through yet
+
             using (var context = new EbayWatcherContext())
             {
-                // Get token from Ebay
-                var sessionId = Users.GetCurrentSessionId();
-                var client = GetSdkClient();
-                var call = new FetchTokenCall(client);
-                var token = call.FetchToken(sessionId);
-
-                // If the token comes back empty, that means they didn't complete the sign-in process.
-                if (token.IsNullOrWhiteSpace())
+                // Save user credentials in user record
+                var user = context.Users.SingleOrDefault(a => a.EbayUsername == authorization.EbayUsername);
+                if (user == null)
                 {
-                    return false;
-                }
-                else
-                {
-                    // Otherwise get the user id of the logged in user from Ebay
-                    var userCall = new ConfirmIdentityCall(client);
-                    var ebayUsername = userCall.ConfirmIdentity(sessionId).ToLowerOrDefault(); // Always use the lowercase version of the username
-
-                    // Create user if it doesn't already exist
-                    var user = context.Users.SingleOrDefault(a => a.EbayUsername == ebayUsername);
-                    if (user == null)
+                    user = new User()
                     {
-                        user = new User()
-                        {
-                            EbayUsername = ebayUsername
-                        };
-                        context.Users.Add(user);
-                    }
-
-                    user.EbaySessionId = sessionId;
-                    user.EbayToken = token;
-
-                    if (context.GetValidationErrors().Any())
-                        throw new Exception(string.Join(Environment.NewLine, context.GetValidationErrors().SelectMany(a => a.ValidationErrors).Select(a => a.PropertyName + ": " + a.ErrorMessage)));
-
-                    context.SaveChanges();
-
-                    HttpContext.Current.Session["EbaySessionId"] = sessionId;
-                    HttpContext.Current.Session["EbayToken"] = token;
-                    HttpContext.Current.Session["EbayUsername"] = ebayUsername;
-
-                    return true;
+                        EbayUsername = authorization.EbayUsername
+                    };
+                    context.Users.Add(user);
                 }
+                user.EbaySessionId = sessionId;
+                user.EbayToken = authorization.Token;
+                if (context.GetValidationErrors().Any())
+                    throw new Exception(string.Join(Environment.NewLine, context.GetValidationErrors().SelectMany(a => a.ValidationErrors).Select(a => a.PropertyName + ": " + a.ErrorMessage)));
+                context.SaveChanges();
+
+                // Put credentials into the current session
+                HttpContext.Current.Session["EbaySessionId"] = sessionId;
+                HttpContext.Current.Session["EbayToken"] = authorization.Token;
+                HttpContext.Current.Session["EbayUsername"] = authorization.EbayUsername;
+
+                return true;
             }
         }
         #endregion
