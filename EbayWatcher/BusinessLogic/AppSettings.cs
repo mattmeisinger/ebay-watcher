@@ -1,5 +1,4 @@
-﻿using EbayWatcher.BusinessLogic.Exceptions;
-using EbayWatcher.Entities;
+﻿using EbayWatcher.Entities;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
