@@ -11,34 +11,17 @@ namespace EbayWatcher.BusinessLogic
 {
     public class AppSettings
     {
+        private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
+
         public static string Get(string settingName)
         {
-            using (var context = new EbayWatcherContext())
-            {
-                var filename = HttpContext.Current.Server.MapPath(Properties.Settings.Default.ApiKeysJsonFile);
-                if (!File.Exists(filename))
-                {
-                    throw new SettingsFileNotFoundException(filename);
-                }
-                else
-                {
-                    var json = File.ReadAllText(filename);
-                    var settings = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
-                    if (!settings.ContainsKey(settingName))
-                    {
-                        throw new Exception("Setting '" + settingName + "' was not found in settings file '" + filename + "'.");
-                    }
-                    else
-                    {
-                        
-                        return settings[settingName];
-                    }
-                }
-            }
-        }
-        public static void Set(string settingName, string value)
-        {
-            throw new NotImplementedException();
+            // Check the environment variables first
+            var envSettingName = ("EbayWatcher_" + settingName).ToUpper();
+            var fromEnv = Environment.GetEnvironmentVariable(envSettingName);
+            if (fromEnv != null)
+                return fromEnv;
+            else
+                throw new Exception($"Environment variable not set, needed for application to run: {envSettingName}");
         }
     }
 }

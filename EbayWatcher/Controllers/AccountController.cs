@@ -22,7 +22,7 @@ namespace EbayWatcher.Controllers
         public JsonResult LogOut()
         {
             Users.LogOut();
-            return Success();
+            return Json(new { Response = "Success" });
         }
     }
 }

@@ -64,8 +64,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="NLog">
-      <HintPath>..\packages\NLog.3.1.0.0\lib\net45\NLog.dll</HintPath>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.0.1\lib\net45\NLog.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="SLF">
       <HintPath>..\lib\SLF.dll</HintPath>
@@ -203,7 +204,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
-    <Content Include="App_Data\ebay-api-keys.json" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Content Include="NLog.config" />
     <EntityDeploy Include="Entities\EbayWatcherContext.edmx">
@@ -274,12 +274,10 @@
     </Compile>
     <Compile Include="BusinessLogic\AppSettings.cs" />
     <Compile Include="BusinessLogic\Ebay.cs" />
-    <Compile Include="BusinessLogic\Exceptions\SettingsFileNotFoundException.cs" />
     <Compile Include="BusinessLogic\Users.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\SetupController.cs" />
     <Compile Include="Controllers\WishlistController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -318,12 +316,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EbayAPIHelper\EbayAPIHelper.csproj">
-      <Project>{ab6bd2fc-ca45-44dc-ae4a-97fe283c8b68}</Project>
-      <Name>EbayAPIHelper</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <TypeScriptCompile Include="Scripts\controllers.ts" />
     <TypeScriptCompile Include="Scripts\EbayWatcher\SelectEbayItems.ts" />
     <TypeScriptCompile Include="Scripts\EbayWatcher\FindCategory.ts" />
@@ -332,6 +324,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EbayAPIHelper\EbayAPIHelper.csproj">
+      <Project>{ab6bd2fc-ca45-44dc-ae4a-97fe283c8b68}</Project>
+      <Name>EbayAPIHelper</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
