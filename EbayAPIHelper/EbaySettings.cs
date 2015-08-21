@@ -14,6 +14,7 @@ namespace EbayAPIHelper
         public static string RuName { get; set; }
         public static string TradingServerAddress { get; set; }
         public static string FindingServerAddress { get; set; }
+        public static string EbayXMLAPIURL { get; set; }
 
         public static void Validate()
         {

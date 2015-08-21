@@ -10,5 +10,10 @@ namespace EbayAPIHelper.Models
     {
         public string LoginUrl { get; internal set; }
         public string SessionId { get; internal set; }
+
+        public override string ToString()
+        {
+            return "Session ID: " + SessionId;
+        }
     }
 }

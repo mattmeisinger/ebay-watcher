@@ -26,7 +26,7 @@ namespace EbayAPIHelper
                         Developer = EbaySettings.DevID,
                         Certificate = EbaySettings.CertID
                     },
-                    eBayToken = EbaySettings.EBayToken
+                    //eBayToken = EbaySettings.EBayToken
                 },
                 Site = SiteCodeType.US,
                 RuName = EbaySettings.RuName

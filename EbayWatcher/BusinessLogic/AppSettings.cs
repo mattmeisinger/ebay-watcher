@@ -1,10 +1,4 @@
-﻿using EbayWatcher.Entities;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Web;
+﻿using System;
 
 namespace EbayWatcher.BusinessLogic
 {

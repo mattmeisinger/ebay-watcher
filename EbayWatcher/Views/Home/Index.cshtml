@@ -3,5 +3,8 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<div ng-controller="UserController">
+    <div ng-show="isLoggedIn">Logged in!</div>
+    <div ng-hide="isLoggedIn">Not logged in</div>
 
+</div>

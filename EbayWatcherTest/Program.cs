@@ -22,6 +22,7 @@ namespace EbayWatcherTest
             EbayAPIHelper.EbaySettings.RuName = AppSettings.Get("RuName");
             EbayAPIHelper.EbaySettings.TradingServerAddress = ConfigurationManager.AppSettings["TradingServerAddress"];
             EbayAPIHelper.EbaySettings.FindingServerAddress = ConfigurationManager.AppSettings["FindingServerAddress"];
+            EbayAPIHelper.EbaySettings.EbayXMLAPIURL = ConfigurationManager.AppSettings["EbayXMLAPIURL"];
 
             Console.WriteLine("Creating Auth Request...");
             var ebayAuthRequest = EbayAPIHelper.EbayAuth.CreateNewAuthRequest();

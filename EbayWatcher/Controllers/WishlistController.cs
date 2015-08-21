@@ -1,6 +1,5 @@
 ﻿using EbayWatcher.BusinessLogic;
 using EbayWatcher.Entities;
-using EbayWatcher.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +8,7 @@ using System.Web.Mvc;
 
 namespace EbayWatcher.Controllers
 {
-    public class WishlistController : AuthenticatedController
+    public class WishlistController : BaseController
     {
         public ActionResult Index()
         {
@@ -30,21 +29,21 @@ namespace EbayWatcher.Controllers
                 if (Id.HasValue)
                     return View(context.WishlistItems.Single(a => a.Id == Id));
                 else
-                    return View(new Entities.WishlistItem { });
+                    return View(new WishlistItem { });
             }
         }
 
         [HttpPost]
-        public ActionResult Edit(Entities.WishlistItem o)
+        public ActionResult Edit(WishlistItem o)
         {
             using (var context = new EbayWatcherContext())
             {
-                Entities.WishlistItem s = null;
+                WishlistItem s = null;
                 if (o.Id == 0)
                 {
                     s = new Entities.WishlistItem
                     {
-                        UserId = EbayWatcher.BusinessLogic.Users.GetCurrentUser().Id
+                        //UserId = EbayWatcher.BusinessLogic.Users.GetCurrentUsername()
                     };
                     context.WishlistItems.Add(s);
                 }

@@ -18,7 +18,8 @@ namespace EbayWatcher.Controllers
             });
         }
 
-        public JsonResult NewAuthRequest() => Json(EbayAuth.CreateNewAuthRequest());
+        public JsonResult RequestAuthorization() => Json(EbayAuth.CreateNewAuthRequest());
+        public JsonResult ConfirmEbayAccess(string sessionId) => Json(EbayAuth.CompleteEbayAuthentication(sessionId));
         public JsonResult LogOut()
         {
             Users.LogOut();

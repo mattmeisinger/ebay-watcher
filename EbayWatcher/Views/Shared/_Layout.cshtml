@@ -9,12 +9,9 @@
 
     <!-- Styles -->
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link href="//cdn.kendostatic.com/2014.1.318/styles/kendo.common-bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link href="//cdn.kendostatic.com/2014.1.318/styles/kendo.bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link href="~/Content/css" rel="stylesheet" type="text/css" />
-
-    <!-- Scripts -->
-    <script src="~/Scripts/modernizr-2.7.2.js"></script>
+    <!--<link href="//cdn.kendostatic.com/2014.1.318/styles/kendo.common-bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="//cdn.kendostatic.com/2014.1.318/styles/kendo.bootstrap.min.css" rel="stylesheet" type="text/css" />-->
+    <link href="~/bundles/styles" rel="stylesheet" type="text/css" />
 
 </head>
 <body>
@@ -47,9 +44,10 @@
         </footer>
     </div>
 
-    <script src="//cdn.kendostatic.com/2014.1.318/js/jquery.min.js"></script>
-    <script src="//cdn.kendostatic.com/2014.1.318/js/kendo.all.min.js"></script>
-    <script src="~/Scripts/js"></script>
+    @*<script src="//cdn.kendostatic.com/2014.1.318/js/jquery.min.js"></script>
+    <script src="//cdn.kendostatic.com/2014.1.318/js/kendo.all.min.js"></script>*@
+    @Scripts.Render("~/bundles/scripts")
+    <!--<script type="text/javascript" src="~/bundles/scripts"></script>-->
 
 </body>
 </html>

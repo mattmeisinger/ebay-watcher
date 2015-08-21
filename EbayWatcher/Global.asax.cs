@@ -26,6 +26,8 @@ namespace EbayWatcher
             EbayAPIHelper.EbaySettings.RuName = AppSettings.Get("RuName");
             EbayAPIHelper.EbaySettings.TradingServerAddress = ConfigurationManager.AppSettings["TradingServerAddress"];
             EbayAPIHelper.EbaySettings.FindingServerAddress = ConfigurationManager.AppSettings["FindingServerAddress"];
+            EbayAPIHelper.EbaySettings.EbayXMLAPIURL = ConfigurationManager.AppSettings["EbayXMLAPIURL"];
+            
         }
     }
 }

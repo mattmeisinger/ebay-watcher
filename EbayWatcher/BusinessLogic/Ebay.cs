@@ -146,39 +146,6 @@ namespace EbayWatcher.BusinessLogic
                 return ret.ToArray();
             }
         }
-        public static bool CompleteEbayAuthentication()
-        {
-            var sessionId = Users.GetCurrentSessionId();
-            var authorization = EbayAuth.CompleteEbayAuthentication(sessionId);
-            if (authorization == null)
-                return false; // The authorization hasn't gone through yet
-
-            using (var context = new EbayWatcherContext())
-            {
-                // Save user credentials in user record
-                var user = context.Users.SingleOrDefault(a => a.EbayUsername == authorization.EbayUsername);
-                if (user == null)
-                {
-                    user = new User()
-                    {
-                        EbayUsername = authorization.EbayUsername
-                    };
-                    context.Users.Add(user);
-                }
-                user.EbaySessionId = sessionId;
-                user.EbayToken = authorization.Token;
-                if (context.GetValidationErrors().Any())
-                    throw new Exception(string.Join(Environment.NewLine, context.GetValidationErrors().SelectMany(a => a.ValidationErrors).Select(a => a.PropertyName + ": " + a.ErrorMessage)));
-                context.SaveChanges();
-
-                // Put credentials into the current session
-                HttpContext.Current.Session["EbaySessionId"] = sessionId;
-                HttpContext.Current.Session["EbayToken"] = authorization.Token;
-                HttpContext.Current.Session["EbayUsername"] = authorization.EbayUsername;
-
-                return true;
-            }
-        }
         #endregion
     }
 }
