@@ -1,0 +1,1 @@
+﻿var eBayWatcher = angular.module('eBayWatcher', ['AccountController', 'SearchController']);

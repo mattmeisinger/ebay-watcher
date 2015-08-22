@@ -17,7 +17,7 @@ namespace EbayAPIHelper
             var call = new GetSessionIDCall(client);
             var sessionId = call.GetSessionID(EbaySettings.RuName);
             var urlEncodedSessionID = System.Net.WebUtility.UrlEncode(sessionId);
-            var loginUrl = string.Format("https://signin.ebay.com/ws/eBayISAPI.dll?SignIn&RuName={0}&SessID={1}", EbaySettings.RuName, urlEncodedSessionID);
+            var loginUrl = string.Format("https://signin.ebay.com/ws/eBayISAPI.dll?SignIn&RuName={0}&SessID={1}&AcceptURL=http://google.com", EbaySettings.RuName, urlEncodedSessionID);
 
             var data = new EbayAuthRequest
             {
