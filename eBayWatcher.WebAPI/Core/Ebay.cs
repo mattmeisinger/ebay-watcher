@@ -1,15 +1,14 @@
 ﻿using eBay.Service.Finding.Finding;
 using eBay.Services;
 using EbayAPIHelper;
-using EbayWatcher.Entities;
-using EbayWatcher.Models;
+using eBayWatcher.WebAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web;
 
-namespace EbayWatcher.BusinessLogic
+namespace eBayWatcher.WebAPI.Core
 {
     public class Ebay
     {
@@ -80,68 +79,49 @@ namespace EbayWatcher.BusinessLogic
         public static CategoryListItem[] FindCategories(string searchTerm)
         {
             // Get suggested categories from Ebay
-            using (var context = new EbayWatcherContext())
+            var categories = EbayClientHelper.FindCategories(searchTerm);
+
+            // Convert into POCO objects
+            var ret = new List<CategoryListItem>();
+            foreach (var a in categories)
             {
-                var categories = EbayClientHelper.FindCategories(searchTerm);
-
-                // Convert into POCO objects
-                var ret = new List<CategoryListItem>();
-                foreach (var a in categories)
+                // Build list of parent categories
+                var parents = new List<CategoryListItem>();
+                for (int i = 0; i < a.Category.CategoryParentID.Count; i++)
                 {
-                    // Build list of parent categories
-                    var parents = new List<Entities.Category>();
-                    for (int i = 0; i < a.Category.CategoryParentID.Count; i++)
+                    var category = new CategoryListItem
                     {
-                        var category = new Entities.Category
-                        {
-                            Id = a.Category.CategoryParentID[i].ToIntOrDefault().Value,
-                            Name = a.Category.CategoryParentName[i]
-                        };
-                        parents.Add(category);
-                    }
-
-                    // Go through the categories and determine what the full category
-                    // name is (with parents included in the string)
-                    var fullCategoryName = new StringBuilder();
-                    foreach (var item in parents)
-                    {
-                        fullCategoryName.Append(item.Name);
-                        item.FullName = fullCategoryName.ToString();
-                        fullCategoryName.Append(" > ");
-                    }
-                    fullCategoryName.Append(a.Category.CategoryName);
-
-                    // Create new category
-                    var newItem = new Entities.Category();
-                    newItem.Id = a.Category.CategoryID.ToIntOrDefault().Value;
-                    newItem.Name = a.Category.CategoryName;
-                    newItem.FullName = fullCategoryName.ToString();
-                    ret.Add(new CategoryListItem
-                    {
-                        Item = new Entities.Category
-                        {
-                            Id = a.Category.CategoryID.ToIntOrDefault().Value,
-                            Name = a.Category.CategoryName,
-                            FullName = fullCategoryName.ToString()
-                        },
-                        Parents = parents.ToArray()
-                    });
+                        Id = a.Category.CategoryParentID[i].ToIntOrDefault().Value,
+                        Name = a.Category.CategoryParentName[i]
+                    };
+                    parents.Add(category);
                 }
 
-                // Add any categories that don't exist yet to the database
-                var categoryIdsInDatabase = context.Categories.Select(a => a.Id).ToList();
-                var allQueryCategoryResults = ret.Select(a => a.Item).Union(ret.SelectMany(a => a.Parents)).ToArray();
-                foreach (var item in allQueryCategoryResults)
+                // Go through the categories and determine what the full category
+                // name is (with parents included in the string)
+                var fullCategoryName = new StringBuilder();
+                foreach (var item in parents)
                 {
-                    if (!categoryIdsInDatabase.Contains(item.Id))
-                    {
-                        context.Categories.Add(item);
-                        categoryIdsInDatabase.Add(item.Id);
-                    }
+                    fullCategoryName.Append(item.Name);
+                    item.FullName = fullCategoryName.ToString();
+                    fullCategoryName.Append(" > ");
                 }
-                context.SaveChanges();
-                return ret.ToArray();
+                fullCategoryName.Append(a.Category.CategoryName);
+
+                // Create new category
+                var newItem = new CategoryListItem();
+                newItem.Id = a.Category.CategoryID.ToIntOrDefault().Value;
+                newItem.Name = a.Category.CategoryName;
+                newItem.FullName = fullCategoryName.ToString();
+                ret.Add(new CategoryListItem
+                {
+                    Id = a.Category.CategoryID.ToIntOrDefault().Value,
+                    Name = a.Category.CategoryName,
+                    FullName = fullCategoryName.ToString(),
+                    Parents = parents.ToArray()
+                });
             }
+            return ret.ToArray();
         }
         #endregion
     }
