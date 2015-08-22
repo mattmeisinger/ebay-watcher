@@ -1,10 +1,9 @@
-﻿using EbayAPIHelper;
-using eBayWatcher.WebAPI.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Caching;
-using System.Web;
+using EbayAPIHelper;
+using eBayWatcher.WebAPI.Models;
 
 namespace eBayWatcher.WebAPI.Core
 {
@@ -16,9 +15,10 @@ namespace eBayWatcher.WebAPI.Core
 
         public static Account FromSession(string sessionId)
         {
-            var account = new Account();
             var cacheKey = "AuthStatus-" + sessionId;
             var minutesToCacheUserProfile = 120;
+
+            var account = new Account();
             account.Status = MemoryCache.Default[cacheKey] as EBayAuthStatus;
             if (account.Status == null)
             {

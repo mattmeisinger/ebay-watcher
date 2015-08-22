@@ -82,7 +82,7 @@ namespace EbayWatcher.BusinessLogic
             // Get suggested categories from Ebay
             using (var context = new EbayWatcherContext())
             {
-                var categories = EbayClientHelper.FindCategories(searchTerm);
+                var categories = EbayClientHelper.FindCategories("", searchTerm);
 
                 // Convert into POCO objects
                 var ret = new List<CategoryListItem>();

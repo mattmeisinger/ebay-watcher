@@ -18,16 +18,15 @@ namespace eBayWatcher.WebAPI.Controllers
         [HttpPost]
         public string CreateNewSession() => Guid.NewGuid().ToString();
 
+
         [Route("Account/{sessionId}")]
         [HttpGet]
         public EBayAuthStatus GetStatus(string sessionId) => Account.FromSession(sessionId).Status;
 
         [Route("Account/{sessionId}")]
         [HttpDelete]
-        public void LogOut(string sessionId)
-        {
+        public void LogOut(string sessionId) { }
 
-        }
 
         [Route("Account/{sessionId}/StartLogin")]
         [HttpPost]

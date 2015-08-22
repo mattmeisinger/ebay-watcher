@@ -1,11 +1,12 @@
-﻿<div>
+﻿
+<div>
     <div class="row" ng-controller="AccountController">
         <div class="col-md-12" style="background-color: #acd3ef; border: 1px solid #0067b1;">
             Account: 
             {{authStatus.Description}}
-            <button ng-click="startLogin()" ng-show="authStatus.Description==='Not logged in'" class="btn-danger">startLogin</button>
-            <a href="{{authStatus.LoginUrl}}" ng-show="authStatus.Description==='Awaiting eBay Authorization'">Login at eBay Site</a>
-            <button ng-click="continueLogin()" ng-show="authStatus.Description==='Awaiting eBay Authorization'" class="btn-danger">continueLogin</button>
+            <button ng-click="startLogin()" ng-show="authStatus.Description==='Not logged in'" class="btn btn-danger">Log In</button>
+            <a href="{{authStatus.LoginUrl}}" target="_blank" ng-show="authStatus.Description==='Awaiting eBay Authorization'">Login at eBay Site</a>
+            <button ng-click="continueLogin()" ng-show="authStatus.Description==='Awaiting eBay Authorization'" class="btn btn-danger">Continue Login</button>
         </div>
     </div>
     <div class="row">
@@ -14,11 +15,55 @@
         </div>
         <div class="col-md-8" ng-controller="SearchController">
             <h2>Search</h2>
-            <form>
-                <input type="text" placeholder="Search for..." ng-model="searchTerm" />
-                <input type="text" placeholder="(all categories)" ng-model="category" />
-                <button type="submit" class="btn btn-primary">Search</button>
+            <form ng-submit="search()">
+                <div class="row">
+                    <div class="col-md-4">
+                        <input type="text" placeholder="Search for..." ng-model="searchTerm" />
+                    </div>
+                    <div class="col-md-4">
+                        <span>{{selectedCategory.Name}}</span>
+                        <a href="" class="btn btn-link" ng-click="selectCategory()">Select</a>
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-primary" ng-disabled="!selectedCategory.Id || !searchTerm">Search</button>
+                    </div>
+                </div>
             </form>
+            <div style="padding-top: 10px">
+                <h3>Completed - Sold</h3>
+                <div>
+                    <table class="table">
+                        <tr ng-repeat="r in results.Completed">
+                            <td><img ng-src="{{r.ImageUrl}}" alt="{{r.Name}}" class="ebay-thumb" /></td>
+                            <td><a href="{{r.Url}}">{{r.Name}}</a></td>
+                            <td>{{r.Type}}</td>
+                            <td>{{r.AuctionPrice | number:4}}</td>
+                        </tr>
+                    </table>
+                </div>
+                <h3>Auction</h3>
+                <div>
+                    <table class="table">
+                        <tr ng-repeat="r in results.CurrentAuction">
+                            <td><img ng-src="{{r.ImageUrl}}" alt="{{r.Name}}" class="ebay-thumb" /></td>
+                            <td><a href="{{r.Url}}">{{r.Name}}</a></td>
+                            <td>{{r.Type}}</td>
+                            <td>{{r.AuctionPrice | number:4}}</td>
+                        </tr>
+                    </table>
+                </div>
+                <h3>Buy it Now</h3>
+                <div>
+                    <table class="table">
+                        <tr ng-repeat="r in results.CurrentBuyItNow">
+                            <td><img ng-src="{{r.ImageUrl}}" alt="{{r.Name}}" class="ebay-thumb" /></td>
+                            <td><a href="{{r.Url}}">{{r.Name}}</a></td>
+                            <td>{{r.Type}}</td>
+                            <td>{{r.AuctionPrice | number:4}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>

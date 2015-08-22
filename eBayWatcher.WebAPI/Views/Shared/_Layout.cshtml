@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html>
+<html ng-app="eBayWatcher">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
@@ -30,13 +30,41 @@
         </div>
     </div>
     <div class="container body-content">
-        <div ng-app="eBayWatcher">
+        <div>
             @RenderBody()
         </div>
         <hr />
         <footer>
             <p>&copy; @DateTime.Now.Year - eBay Watcher</p>
         </footer>
+    </div>
+
+    <div ng-controller="CategorySearchController">
+        @* Using simple dialog: https://gist.github.com/mattmeisinger/de693d6e93602c1ea442 *@
+        <div class="modal-window-backdrop" ng-show="visible" ng-click="backdropClicked()">
+            <div class="modal-window-content" ng-click="contentClicked($event)">
+                <h3>Find Category</h3>
+                <form ng-submit="search()">
+                    Search:
+                    <input type="text" ng-model="searchTerm" id="categorySearchBox" />
+                    <button class="btn btn-success" ng-disabled="loading">Search</button>
+                </form>
+                <div style="padding-top: 10px;" ng-show="loading">
+                    Searching eBay categories...
+                </div>
+                <div style="padding-top: 10px;" ng-show="searched && !loading">
+                    <div>Found {{results.length}} results.</div>
+                    <div ng-repeat="r in results">
+                        <span ng-repeat="p in r.Parents">
+                            <a href="" ng-click="selectItem(p)">{{p.Name}}</a>
+                            <span> > </span>
+                        </span>
+
+                        <a href="" ng-click="selectItem(r)">{{r.Name}}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     @* Scripts *@

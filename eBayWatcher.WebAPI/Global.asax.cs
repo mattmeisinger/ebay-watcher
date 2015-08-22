@@ -1,5 +1,4 @@
-﻿using eBayWatcher.WebAPI.Core;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -8,10 +7,11 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using eBayWatcher.WebAPI.Core;
 
 namespace eBayWatcher.WebAPI
 {
-    public class WebApiApplication : System.Web.HttpApplication
+    public class WebApiApplication : HttpApplication
     {
         protected void Application_Start()
         {

@@ -14,7 +14,6 @@ namespace eBayWatcher.WebAPI.Core
     {
         private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
 
-        #region Client Setup
         public static FindingServicePortTypeClient GetFindingClient()
         {
             ClientConfig config = new ClientConfig
@@ -25,10 +24,8 @@ namespace eBayWatcher.WebAPI.Core
 
             return FindingServiceClientFactory.getServiceClient(config);
         }
-        #endregion
 
-        #region Data Calls
-        public static EbayCompletedItem[] GetCompletedItems(string keyword, int categoryId)
+        public static EbayItem[] GetCompletedItems(string keyword, int? categoryId)
         {
             var ret = GetFindingClient().findCompletedItems(new FindCompletedItemsRequest
             {
@@ -40,7 +37,8 @@ namespace eBayWatcher.WebAPI.Core
                 throw new Exception(string.Join(Environment.NewLine, ret.errorMessage.Select(a => a.message)));
 
             return ret.searchResult.item
-                .Select(a => new EbayCompletedItem
+                .Where(a=>a.sellingStatus.sellingState == "EndedWithSales")
+                .Select(a => new EbayItem
                 {
                     Id = a.itemId,
                     Name = a.title,
@@ -50,10 +48,13 @@ namespace eBayWatcher.WebAPI.Core
                     AuctionPrice = a.sellingStatus.convertedCurrentPrice == null ? (double?)null : a.sellingStatus.convertedCurrentPrice.Value,
                     BidCount = a.sellingStatus.bidCount,
                     BuyItNowPrice = a.listingInfo.buyItNowAvailable ? a.listingInfo.buyItNowPrice.Value : (double?)null,
+                    Status = "Completed",
+                    Type = a.listingInfo.listingType,
+                    Details = a
                 })
                 .ToArray();
         }
-        public static EbayCurrentItem[] GetCurrentItems(string keyword, int categoryId)
+        public static EbayItem[] GetCurrentItems(string keyword, int? categoryId)
         {
             var context = GetFindingClient();
             var ret = context.findItemsAdvanced(new FindItemsAdvancedRequest
@@ -66,20 +67,26 @@ namespace eBayWatcher.WebAPI.Core
                 throw new Exception(string.Join(Environment.NewLine, ret.errorMessage.Select(a => a.message)));
 
             return ret.searchResult.item
-                .Select(a => new EbayCurrentItem
+                .Select(a => new EbayItem
                 {
                     Id = a.itemId,
                     BuyItNowPrice = a.listingInfo.convertedBuyItNowPrice == null ? (double?)null : a.listingInfo.convertedBuyItNowPrice.Value,
                     AuctionEndTime = a.listingInfo.endTimeSpecified ? a.listingInfo.endTime : (DateTime?)null,
                     AuctionPrice = a.sellingStatus.convertedCurrentPrice == null ? (double?)null : a.sellingStatus.convertedCurrentPrice.Value,
-                    BidCount = a.sellingStatus.bidCountSpecified ? a.sellingStatus.bidCount : (int?)null
+                    BidCount = a.sellingStatus.bidCountSpecified ? a.sellingStatus.bidCount : (int?)null,
+                    Name = a.title,
+                    Url = a.viewItemURL,
+                    ImageUrl = a.galleryURL,
+                    Status = "Active",
+                    Type = a.listingInfo.listingType,
+                    Details = a
                 })
                 .ToArray();
         }
-        public static CategoryListItem[] FindCategories(string searchTerm)
+        public static CategoryListItem[] FindCategories(string eBayToken, string searchTerm)
         {
             // Get suggested categories from Ebay
-            var categories = EbayClientHelper.FindCategories(searchTerm);
+            var categories = EbayClientHelper.FindCategories(eBayToken, searchTerm);
 
             // Convert into POCO objects
             var ret = new List<CategoryListItem>();
@@ -123,6 +130,5 @@ namespace eBayWatcher.WebAPI.Core
             }
             return ret.ToArray();
         }
-        #endregion
     }
 }

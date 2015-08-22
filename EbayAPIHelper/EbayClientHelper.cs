@@ -35,9 +35,10 @@ namespace EbayAPIHelper
             return apiContext;
         }
 
-        public static SuggestedCategoryType[] FindCategories(string searchTerm)
+        public static SuggestedCategoryType[] FindCategories(string eBayToken, string searchTerm)
         {
             var client = GetSdkClient();
+            client.ApiCredential.eBayToken = eBayToken;
             var req = new GetSuggestedCategoriesCall(client);
             var categories = req.GetSuggestedCategories(searchTerm).Cast<SuggestedCategoryType>().ToArray();
             return categories;

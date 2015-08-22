@@ -7,6 +7,5 @@ namespace eBayWatcher.WebAPI.Models
 {
     public class EbayCompletedItem : EbayItem
     {
-        public string ImageUrl { get; set; }
     }
 }
