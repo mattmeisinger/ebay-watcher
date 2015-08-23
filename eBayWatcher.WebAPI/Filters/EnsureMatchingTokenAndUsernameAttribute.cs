@@ -44,7 +44,6 @@ namespace eBayWatcher.WebAPI.Filters
                 }
                 else
                 {
-                    throw new Exception("test");
                     // This user is okay, we gave them this token before.
                     log.Info("Matched up user token with username " + username);
                     MemoryCache.Default.Add(cacheKey, token, DateTimeOffset.Now.AddHours(1));

@@ -56,6 +56,10 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="NewRelic.Api.Agent, Version=5.3.90.0, Culture=neutral, PublicKeyToken=06552fced0b33d87, processorArchitecture=MSIL">
+      <HintPath>..\packages\NewRelic.Azure.WebSites.5.3.90.0\lib\NewRelic.Api.Agent.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.0.1\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
@@ -143,8 +147,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Core\" />
-    <Folder Include="Utilities\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -170,10 +172,61 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="newrelic\Extensions\CoreInstrumentation.xml" />
+    <Content Include="newrelic\Extensions\NewRelic.Agent.AttributeFilter.dll" />
+    <Content Include="newrelic\Extensions\NewRelic.Agent.Configuration.dll" />
+    <Content Include="newrelic\Extensions\NewRelic.Agent.Core.dll" />
+    <Content Include="newrelic\Extensions\NewRelic.Agent.LabelsService.dll" />
+    <Content Include="newrelic\Extensions\NewRelic.Agent.LazyMap.dll" />
+    <Content Include="newrelic\Extensions\NewRelic.Collections.dll" />
+    <Content Include="newrelic\Extensions\NewRelic.Core.dll" />
+    <Content Include="newrelic\Extensions\NewRelic.Dispatchers.dll" />
+    <Content Include="newrelic\Extensions\NewRelic.Memoization.dll" />
+    <Content Include="newrelic\Extensions\NewRelic.Providers.CallStack.AsyncLocal.dll" />
+    <Content Include="newrelic\Extensions\NewRelic.Providers.TransactionContext.Asp.dll" />
+    <Content Include="newrelic\Extensions\NewRelic.Providers.TransactionContext.Default.dll" />
+    <Content Include="newrelic\Extensions\NewRelic.Providers.TransactionContext.Wcf3.dll" />
+    <Content Include="newrelic\Extensions\NewRelic.Providers.Wrapper.Asp35.dll" />
+    <Content Include="newrelic\Extensions\NewRelic.Providers.Wrapper.Asp35.Instrumentation.xml" />
+    <Content Include="newrelic\Extensions\NewRelic.Providers.Wrapper.HttpClient.dll" />
+    <Content Include="newrelic\Extensions\NewRelic.Providers.Wrapper.HttpClient.Instrumentation.xml" />
+    <Content Include="newrelic\Extensions\NewRelic.Providers.Wrapper.MongoDb.dll" />
+    <Content Include="newrelic\Extensions\NewRelic.Providers.Wrapper.MongoDb.Instrumentation.xml" />
+    <Content Include="newrelic\Extensions\NewRelic.Providers.Wrapper.Mvc3.dll" />
+    <Content Include="newrelic\Extensions\NewRelic.Providers.Wrapper.Mvc3.Instrumentation.xml" />
+    <Content Include="newrelic\Extensions\NewRelic.Providers.Wrapper.NServiceBus.dll" />
+    <Content Include="newrelic\Extensions\NewRelic.Providers.Wrapper.NServiceBus.Instrumentation.xml" />
+    <Content Include="newrelic\Extensions\NewRelic.Providers.Wrapper.Wcf3.dll" />
+    <Content Include="newrelic\Extensions\NewRelic.Providers.Wrapper.Wcf3.Instrumentation.xml" />
+    <Content Include="newrelic\Extensions\NewRelic.Providers.Wrapper.WebApi1.dll" />
+    <Content Include="newrelic\Extensions\NewRelic.Providers.Wrapper.WebApi1.Instrumentation.xml" />
+    <Content Include="newrelic\Extensions\NewRelic.Providers.Wrapper.WebApi2.dll" />
+    <Content Include="newrelic\Extensions\NewRelic.Providers.Wrapper.WebApi2.Instrumentation.xml" />
+    <Content Include="newrelic\Extensions\NewRelic.Providers.Wrapper.WebOptimization.dll" />
+    <Content Include="newrelic\Extensions\NewRelic.Providers.Wrapper.WebOptimization.Instrumentation.xml" />
+    <Content Include="newrelic\Extensions\NewRelic.Providers.Wrapper.WebServices.dll" />
+    <Content Include="newrelic\Extensions\NewRelic.Providers.Wrapper.WebServices.Instrumentation.xml" />
+    <Content Include="newrelic\Extensions\NewRelic.Reflection.dll" />
+    <Content Include="newrelic\Extensions\NewRelic.SystemExtensions.dll" />
+    <Content Include="newrelic\Extensions\NewRelic.SystemInterfaces.dll" />
+    <Content Include="newrelic\Extensions\NewRelic.Testing.Assertions.dll" />
+    <Content Include="newrelic\Extensions\NewRelic.Trie.dll" />
+    <Content Include="newrelic\Extensions\NewRelic.TypeInstantiation.dll" />
+    <Content Include="newrelic\Extensions\NewRelic.WeakActions.dll" />
+    <Content Include="newrelic\NewRelic.Agent.Core.dll" />
+    <Content Include="newrelic\NewRelic.Agent.Extensions.dll" />
+    <Content Include="newrelic\NewRelic.Profiler.dll" />
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="newrelic\newrelic.config" />
+    <Content Include="newrelic\Extensions\extension.xsd">
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="newrelic\newrelic.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\PublishProfiles\eBayWatcherWebAPI.pubxml" />
     <Content Include="Scripts\angular.min.js.map" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
