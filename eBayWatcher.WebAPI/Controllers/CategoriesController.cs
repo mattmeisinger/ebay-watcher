@@ -1,5 +1,5 @@
-﻿using eBayWatcher.WebAPI.Core;
-using eBayWatcher.WebAPI.Models;
+﻿using eBayWatcher.Core.eBay.SearchAPI;
+using eBayWatcher.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +14,6 @@ namespace eBayWatcher.WebAPI.Controllers
     {
         [Route("Categories/Search")]
         [HttpPost]
-        public CategoryListItem[] Search([FromBody] dynamic p) => Ebay.FindCategories((string)p.eBayToken, (string)p.searchTerm);
+        public CategoryListItem[] Search([FromBody] dynamic p) => FindingClient.FindCategories((string)p.eBayToken, (string)p.searchTerm);
     }
 }

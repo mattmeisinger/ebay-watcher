@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{AB6BD2FC-CA45-44DC-AE4A-97FE283C8B68}</ProjectGuid>
+    <ProjectGuid>{86836CAC-3CB5-4B7C-8F1C-968A7540E92F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EbayAPIHelper</RootNamespace>
-    <AssemblyName>EbayAPIHelper</AssemblyName>
+    <RootNamespace>eBayWatcher.eBay</RootNamespace>
+    <AssemblyName>eBayWatcher.eBay</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -37,10 +37,6 @@
     <Reference Include="eBay.Service.Finding">
       <HintPath>..\lib\eBay.Service.Finding.dll</HintPath>
     </Reference>
-    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.0.1\lib\net45\NLog.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -51,12 +47,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CallHandlers\ConfirmIdentityCall.cs" />
+    <Compile Include="EbayAuth.cs" />
+    <Compile Include="EbayClientHelper.cs" />
+    <Compile Include="EbaySettings.cs" />
+    <Compile Include="Helpers\Utilities.cs" />
+    <Compile Include="Models\EbayAuthenticatedCredentials.cs" />
+    <Compile Include="Models\EbayAuthRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SearchAPI\FindingClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

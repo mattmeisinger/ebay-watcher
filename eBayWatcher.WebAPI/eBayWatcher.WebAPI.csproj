@@ -143,6 +143,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Core\" />
+    <Folder Include="Models\" />
+    <Folder Include="Utilities\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -153,19 +156,10 @@
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Core\Account.cs" />
-    <Compile Include="Core\AppSettings.cs" />
-    <Compile Include="Core\Ebay.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\CategoryListItem.cs" />
-    <Compile Include="Models\EBayAuthStatus.cs" />
-    <Compile Include="Models\EbayCompletedItem.cs" />
-    <Compile Include="Models\EbayCurrentItem.cs" />
-    <Compile Include="Models\EbayItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utilities\ConversionExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -206,9 +200,9 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EbayAPIHelper\EbayAPIHelper.csproj">
-      <Project>{ab6bd2fc-ca45-44dc-ae4a-97fe283c8b68}</Project>
-      <Name>EbayAPIHelper</Name>
+    <ProjectReference Include="..\eBayWatcher.Core\eBayWatcher.Core.csproj">
+      <Project>{4219e847-cb81-49b6-a607-c1281384040c}</Project>
+      <Name>eBayWatcher.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

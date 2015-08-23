@@ -1,5 +1,4 @@
-﻿using eBayWatcher.WebAPI.Core;
-using eBayWatcher.WebAPI.Models;
+﻿using eBayWatcher.Core.eBay.SearchAPI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,10 +16,10 @@ namespace eBayWatcher.WebAPI.Controllers
         public object Search([FromBody] dynamic p)
         {
             //var token = Account.FromSession((string)p.sessionId).Status.Token;
-            var current = Ebay.GetCurrentItems((string)p.searchTerm, (int)p.categoryId);
+            var current = FindingClient.GetCurrentItems((string)p.searchTerm, (int)p.categoryId);
             return new
             {
-                Completed = Ebay.GetCompletedItems((string)p.searchTerm, (int)p.categoryId),
+                Completed = FindingClient.GetCompletedItems((string)p.searchTerm, (int)p.categoryId),
                 CurrentBuyItNow = current.Where(a => a.Type != "Auction").ToArray(),
                 CurrentAuction = current.Where(a => a.Type == "Auction").ToArray(),
             };

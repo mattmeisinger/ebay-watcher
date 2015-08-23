@@ -31,8 +31,8 @@
 
         </div>
     </div>
-    <div class="row" ng-show="loginStep === 'LoggedIn'" ng-controller="MyListController">
-        <div class="col-md-3">
+    <div class="row" ng-show="loginStep === 'LoggedIn'">
+        <div class="col-md-3" ng-controller="MyListController">
             <h3>My List</h3>
             <div class="new-item-form">
                 <strong>New Watch Item</strong>
@@ -73,14 +73,18 @@
                 <div>
                     <table class="table">
                         <tr ng-repeat="r in results.Completed | filter: { Ignore: false } | orderBy:'Pin'" ng-class="{pinned: r.Pin}">
-                            <td class="ebay-thumb"><img ng-show="r.ImageUrl" ng-src="{{r.ImageUrl}}" alt="{{r.Name}}" /></td>
+                            <td>
+                                <div class="ebay-thumb">
+                                    <img ng-show="r.ImageUrl" ng-src="{{r.ImageUrl}}" alt="{{r.Name}}" />
+                                </div>
+                            </td>
                             <td><a href="{{r.Url}}">{{r.Name}}</a></td>
                             <td>{{r.Type}}</td>
                             <td style="text-align: right;">{{r.AuctionPrice | number:2}}</td>
                             <td style="white-space: nowrap;">
-                                <a href="" ng-click="r.Ignore = true">Ignore</a>
-                                <a href="" ng-click="r.Pin = true" ng-hide="r.Pin">Pin</a>
-                                <a href="" ng-click="r.Pin = false" ng-show="r.Pin">Unpin</a>
+                                <a href="" ng-click="ignore(r)">Ignore</a>
+                                <a href="" ng-click="pin(r)" ng-hide="r.Pin">Pin</a>
+                                <a href="" ng-click="unpin(r)" ng-show="r.Pin">Unpin</a>
                             </td>
                         </tr>
                     </table>
@@ -89,14 +93,18 @@
                 <div>
                     <table class="table">
                         <tr ng-repeat="r in results.CurrentAuction | filter: { Ignore: false } | orderBy:'Pin'" ng-class="{pinned: r.Pin}">
-                            <td class="ebay-thumb"><img ng-show="r.ImageUrl" ng-src="{{r.ImageUrl}}" alt="{{r.Name}}" /></td>
+                            <td>
+                                <div class="ebay-thumb">
+                                    <img ng-show="r.ImageUrl" ng-src="{{r.ImageUrl}}" alt="{{r.Name}}" />
+                                </div>
+                            </td>
                             <td><a href="{{r.Url}}">{{r.Name}}</a></td>
                             <td>{{r.Type}}</td>
                             <td style="text-align: right;">{{r.AuctionPrice | number:2}}</td>
                             <td style="white-space: nowrap;">
-                                <a href="" ng-click="r.Ignore = true">Ignore</a>
-                                <a href="" ng-click="r.Pin = true" ng-hide="r.Pin">Pin</a>
-                                <a href="" ng-click="r.Pin = false" ng-show="r.Pin">Unpin</a>
+                                <a href="" ng-click="ignore(r)">Ignore</a>
+                                <a href="" ng-click="pin(r)" ng-hide="r.Pin">Pin</a>
+                                <a href="" ng-click="unpin(r)" ng-show="r.Pin">Unpin</a>
                             </td>
                         </tr>
                     </table>
@@ -105,14 +113,18 @@
                 <div>
                     <table class="table">
                         <tr ng-repeat="r in results.CurrentBuyItNow | filter: { Ignore: false } | orderBy:'Pin'" ng-class="{pinned: r.Pin}">
-                            <td class="ebay-thumb"><img ng-show="r.ImageUrl" ng-src="{{r.ImageUrl}}" alt="{{r.Name}}" /></td>
+                            <td>
+                                <div class="ebay-thumb">
+                                    <img ng-show="r.ImageUrl" ng-src="{{r.ImageUrl}}" alt="{{r.Name}}" />
+                                </div>
+                            </td>
                             <td><a href="{{r.Url}}">{{r.Name}}</a></td>
                             <td>{{r.Type}}</td>
                             <td style="text-align: right;">{{r.AuctionPrice | number:2}}</td>
                             <td style="white-space: nowrap;">
-                                <a href="" ng-click="r.Ignore = true">Ignore</a>
-                                <a href="" ng-click="r.Pin = true" ng-hide="r.Pin">Pin</a>
-                                <a href="" ng-click="r.Pin = false" ng-show="r.Pin">Unpin</a>
+                                <a href="" ng-click="ignore(r)">Ignore</a>
+                                <a href="" ng-click="pin(r)" ng-hide="r.Pin">Pin</a>
+                                <a href="" ng-click="unpin(r)" ng-show="r.Pin">Unpin</a>
                             </td>
                         </tr>
                     </table>

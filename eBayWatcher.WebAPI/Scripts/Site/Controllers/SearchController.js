@@ -22,4 +22,14 @@ SearchController.controller('SearchController', ['$scope', '$http', '$rootScope'
             });
     };
 
+    $scope.ignore = function (item) {
+        item.Ignore = true;
+    }
+    $scope.pin = function (item) {
+        item.Pin = true;
+    }
+    $scope.unpin = function (item) {
+        item.Pin = false;
+    }
+
 }]);
