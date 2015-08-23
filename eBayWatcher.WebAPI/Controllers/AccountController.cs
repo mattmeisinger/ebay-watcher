@@ -1,14 +1,12 @@
-﻿using EbayAPIHelper;
-using EbayAPIHelper.Models;
-using eBayWatcher.WebAPI.Core;
-using eBayWatcher.WebAPI.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
+using eBayWatcher.WebAPI.Core;
+using eBayWatcher.WebAPI.Models;
 
 namespace eBayWatcher.WebAPI.Controllers
 {
@@ -16,24 +14,10 @@ namespace eBayWatcher.WebAPI.Controllers
     {
         [Route("Account")]
         [HttpPost]
-        public string CreateNewSession() => Guid.NewGuid().ToString();
+        public EBayAuthStatus CreateNewSession() => Account.StartSession();
 
-
-        [Route("Account/{sessionId}")]
-        [HttpGet]
-        public EBayAuthStatus GetStatus(string sessionId) => Account.FromSession(sessionId).Status;
-
-        [Route("Account/{sessionId}")]
-        [HttpDelete]
-        public void LogOut(string sessionId) { }
-
-
-        [Route("Account/{sessionId}/StartLogin")]
+        [Route("Account/ConfirmLogin")]
         [HttpPost]
-        public EBayAuthStatus RequestAuthorization(string sessionId) => Account.FromSession(sessionId).StartLogin();
-
-        [Route("Account/{sessionId}/ContinueLogin")]
-        [HttpPost]
-        public EBayAuthStatus ConfirmEbayAccess(string sessionId) => Account.FromSession(sessionId).ContinueLoginAfterEbayApproval();
+        public EBayAuthStatus CompleteEBayAuthentication([FromBody] dynamic p) => Account.ConfirmAuthentication((string)p.sessionId);
     }
 }

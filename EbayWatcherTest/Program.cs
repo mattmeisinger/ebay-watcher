@@ -18,7 +18,6 @@ namespace EbayWatcherTest
             EbayAPIHelper.EbaySettings.AppID = AppSettings.Get("AppID");
             EbayAPIHelper.EbaySettings.CertID = AppSettings.Get("CertID");
             EbayAPIHelper.EbaySettings.DevID = AppSettings.Get("DevID");
-            EbayAPIHelper.EbaySettings.EBayToken = AppSettings.Get("EBayToken");
             EbayAPIHelper.EbaySettings.RuName = AppSettings.Get("RuName");
             EbayAPIHelper.EbaySettings.TradingServerAddress = ConfigurationManager.AppSettings["TradingServerAddress"];
             EbayAPIHelper.EbaySettings.FindingServerAddress = ConfigurationManager.AppSettings["FindingServerAddress"];

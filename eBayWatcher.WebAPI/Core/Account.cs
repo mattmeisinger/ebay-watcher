@@ -4,53 +4,40 @@ using System.Linq;
 using System.Runtime.Caching;
 using EbayAPIHelper;
 using eBayWatcher.WebAPI.Models;
+using EbayAPIHelper.Models;
 
 namespace eBayWatcher.WebAPI.Core
 {
     public class Account
     {
-        public EBayAuthStatus Status { get; set; }
-
-        private Account() { }
-
-        public static Account FromSession(string sessionId)
-        {
-            var cacheKey = "AuthStatus-" + sessionId;
-            var minutesToCacheUserProfile = 120;
-
-            var account = new Account();
-            account.Status = MemoryCache.Default[cacheKey] as EBayAuthStatus;
-            if (account.Status == null)
-            {
-                account.Status = new EBayAuthStatus
-                {
-                    Description = "Not logged in",
-                    EbaySessionId = null,
-                    Username = null,
-                    Token = null
-                };
-                MemoryCache.Default.Add(cacheKey, account.Status, DateTimeOffset.Now.AddMinutes(minutesToCacheUserProfile));
-            }
-            return account;
-        }
-
-        public EBayAuthStatus StartLogin()
+        internal static EBayAuthStatus StartSession()
         {
             var auth = EbayAuth.CreateNewAuthRequest();
-            this.Status.EbaySessionId = auth.SessionId;
-            this.Status.LoginUrl = auth.LoginUrl;
-            this.Status.Description = "Awaiting eBay Authorization";
-            return this.Status;
+            return new EBayAuthStatus
+            {
+                SessionId = auth.SessionId,
+                LoginUrl = auth.LoginUrl
+            };
         }
 
-        public EBayAuthStatus ContinueLoginAfterEbayApproval()
+        internal static EBayAuthStatus ConfirmAuthentication(string sessionId)
         {
-            var auth = EbayAuth.CompleteEbayAuthentication(this.Status.EbaySessionId);
-            this.Status.Username = auth.EbayUsername;
-            this.Status.Token = auth.Token;
-            this.Status.Description = "Logged in as " + this.Status.Username;
-            this.Status.LoginUrl = null;
-            return this.Status;
+            EbayAuthenticatedCredentials auth;
+            try
+            {
+                auth = EbayAuth.CompleteEbayAuthentication(sessionId);
+            }
+            catch (Exception)
+            {
+                throw new Exception("Unable to complete authentication. Please ensure you have logged into eBay.");
+            }
+
+            return new EBayAuthStatus
+            {
+                SessionId = sessionId,
+                Token = auth.Token,
+                Username = auth.EbayUsername
+            };
         }
     }
 }

@@ -11,7 +11,7 @@ namespace eBayWatcher.WebAPI
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
-            var cors = new EnableCorsAttribute("myapp.azuresites.net", "*", "*");
+            var cors = new EnableCorsAttribute("https://myapp.azuresites.net", "*", "*");
             config.EnableCors(cors);
 
             // Web API routes

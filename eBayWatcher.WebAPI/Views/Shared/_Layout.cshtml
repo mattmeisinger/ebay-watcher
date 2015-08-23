@@ -11,7 +11,7 @@
 
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -23,8 +23,8 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/Help">API Info</a></li>
+                    @*<li><a href="/">Home</a></li>
+                    <li><a href="/Help">API Info</a></li>*@
                 </ul>
             </div>
         </div>
@@ -33,13 +33,13 @@
         <div>
             @RenderBody()
         </div>
-        <hr />
+        @*<hr />
         <footer>
             <p>&copy; @DateTime.Now.Year - eBay Watcher</p>
-        </footer>
+        </footer>*@
     </div>
 
-    <div ng-controller="CategorySearchController">
+    <div ng-controller="CategorySearchController" ng-cloak>
         @* Using simple dialog: https://gist.github.com/mattmeisinger/de693d6e93602c1ea442 *@
         <div class="modal-window-backdrop" ng-show="visible" ng-click="backdropClicked()">
             <div class="modal-window-content" ng-click="contentClicked($event)">

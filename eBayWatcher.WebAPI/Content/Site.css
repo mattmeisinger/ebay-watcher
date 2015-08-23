@@ -1,5 +1,5 @@
 ﻿body {
-    padding-top: 50px;
+    padding-top: 55px;
     padding-bottom: 20px;
 }
 
@@ -36,5 +36,48 @@ textarea {
     background-color: rgba(200,200,200,0.7);
 }
 .ebay-thumb {
-    max-height: 50px;
+    min-height: 30px;
+}
+.ebay-thumb img {
+    max-height: 30px;
+    max-width: 50px;
+}
+.new-item-form {
+    border: 1px solid #acd3ef;
+    border-radius: 5px;
+    background-color: #f0f9ff;
+    padding: 8px;
+}
+.form-row {
+    padding-top: 6px;
+}
+.form-row input[type="text"] {
+    height: 23px;
+    width: 150px
+}
+.my-list-item {
+    padding: 2px 5px;
+    cursor: default;
+    border: 1px solid white;
+    margin-top: 3px;
+}
+.my-list-item.selected {
+    border: 1px solid #bbb;
+    background-color: #acd3ef;
+    border-radius: 5px;
+}
+.my-list-item:hover {
+    background-color: #6eb5e8;
+    border-radius: 5px;
+    border-width: 1px;
+}
+.pinned td {
+    background-color: #e2ffd7;
+}
+table td a {
+    margin-right: 5px;
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
 }

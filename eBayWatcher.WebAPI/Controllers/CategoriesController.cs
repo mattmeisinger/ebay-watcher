@@ -14,6 +14,6 @@ namespace eBayWatcher.WebAPI.Controllers
     {
         [Route("Categories/Search")]
         [HttpPost]
-        public CategoryListItem[] Search([FromBody] dynamic p) => Ebay.FindCategories(Account.FromSession((string)p.sessionId).Status.Token, (string)p.searchTerm);
+        public CategoryListItem[] Search([FromBody] dynamic p) => Ebay.FindCategories((string)p.eBayToken, (string)p.searchTerm);
     }
 }

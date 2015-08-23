@@ -25,7 +25,7 @@ CategorySearchController.controller('CategorySearchController', ['$scope', '$htt
 
     $scope.search = function () {
         $scope.loading = true;
-        $http.post('/Categories/Search', { searchTerm: $scope.searchTerm, sessionId: getCookie('eBayWatcherSession') })
+        $http.post('/Categories/Search', { searchTerm: $scope.searchTerm, eBayToken: getCookie('eBayWatcherToken') })
             .then(function (response) {
                 $scope.results = response.data;
                 $scope.loading = false;

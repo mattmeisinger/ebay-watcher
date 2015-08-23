@@ -187,6 +187,7 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\Site\app.js" />
     <Content Include="Scripts\Site\Controllers\CategorySearchController.js" />
+    <Content Include="Scripts\Site\Controllers\MyListController.js" />
     <Content Include="Scripts\Site\Controllers\SearchController.js" />
     <Content Include="Scripts\Site\Controllers\AccountController.js" />
     <Content Include="Web.config" />

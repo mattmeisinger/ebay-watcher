@@ -19,5 +19,6 @@ namespace eBayWatcher.WebAPI.Models
         public string Status { get; set; }
         public string Type { get; set; }
         public SearchItem Details { get; set; }
+        public bool Ignore { get; set; }
     }
 }

@@ -8,7 +8,7 @@ namespace eBayWatcher.WebAPI.Models
     public class EBayAuthStatus
     {
         public string Description { get; set; }
-        public string EbaySessionId { get; set; }
+        public string SessionId { get; set; }
         public string LoginUrl { get; set; }
         public string Token { get; set; }
         public string Username { get; set; }
