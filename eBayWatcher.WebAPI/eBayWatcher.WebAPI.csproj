@@ -144,7 +144,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Core\" />
-    <Folder Include="Models\" />
     <Folder Include="Utilities\" />
   </ItemGroup>
   <ItemGroup>
@@ -152,13 +151,17 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\ApiBaseController.cs" />
+    <Compile Include="Controllers\WatchListItemsController.cs" />
     <Compile Include="Controllers\EbaySearchController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Filters\EnsureMatchingTokenAndUsernameAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AddWatchListItemModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -203,6 +206,10 @@
     <ProjectReference Include="..\eBayWatcher.Core\eBayWatcher.Core.csproj">
       <Project>{4219e847-cb81-49b6-a607-c1281384040c}</Project>
       <Name>eBayWatcher.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\eBayWatcher.DynamoDB\eBayWatcher.DynamoDB.csproj">
+      <Project>{2334d952-198e-4ef5-a77a-975cbd71f867}</Project>
+      <Name>eBayWatcher.DynamoDB</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

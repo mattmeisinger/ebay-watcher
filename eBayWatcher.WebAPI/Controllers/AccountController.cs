@@ -1,5 +1,6 @@
 ﻿using eBayWatcher.Core;
 using eBayWatcher.Core.Models;
+using eBayWatcher.DynamoDB;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,11 @@ namespace eBayWatcher.WebAPI.Controllers
 
         [Route("Account/ConfirmLogin")]
         [HttpPost]
-        public EBayAuthStatus CompleteEBayAuthentication([FromBody] dynamic p) => Account.ConfirmAuthentication((string)p.sessionId);
+        public EBayAuthStatus CompleteEBayAuthentication([FromBody] dynamic p)
+        {
+            var auth = Account.ConfirmAuthentication((string)p.sessionId);
+            Users.AddUserToken(auth.Username, auth.Token);
+            return auth;
+        }
     }
 }

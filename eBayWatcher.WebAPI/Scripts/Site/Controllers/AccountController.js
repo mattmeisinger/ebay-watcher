@@ -20,10 +20,17 @@ AccountController.controller('AccountController', ['$scope', '$http', function (
                 $scope.confirmLogin();
             }
             else {
-                $scope.loginStep = 'LoggedIn';
+                setLoggedIn();
                 $scope.loading = false;
             }
         }
+    }
+
+    function setLoggedIn() {
+        // Set up all requests to pass the token and username along as HTTP Headers
+        $http.defaults.headers.common.eBayWatcherToken = getCookie('eBayWatcherToken');
+        $http.defaults.headers.common.eBayWatcherUsername = getCookie('eBayWatcherUsername');
+        $scope.loginStep = 'LoggedIn';
     }
 
     $scope.startLogin = function () {
@@ -47,7 +54,9 @@ AccountController.controller('AccountController', ['$scope', '$http', function (
                 console.log('Got token ' + response.data.Token + ' for user ' + response.data.Username);
                 setCookie('eBayWatcherToken', response.data.Token);
                 setCookie('eBayWatcherUsername', response.data.Username);
-                $scope.loginStep = 'LoggedIn';
+
+                setLoggedIn();
+
                 $scope.loading = false;
             }, function (response) {
                 // Error

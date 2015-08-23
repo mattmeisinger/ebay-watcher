@@ -40,12 +40,31 @@ MyListController.controller('MyListController', ['$scope', '$http', '$rootScope'
         }
         console.log('item added to list');
         console.log(item);
-        $scope.list.push({
+        var newItem = {
             Name: item.Name,
             SearchText: item.SearchText || item.Name,
             CategoryId: item.CategoryId,
             CategoryName: item.CategoryName
-        });
+        };
+        $scope.saving = true;
+        $http.post('/WatchListItems', { Username: getCookie('eBayWatcherUsername'), Token: getCookie('eBayWatcherToken'), item: newItem })
+            .then(function (response) {
+                var savedItem = response.data;
+                $scope.saving = false;
+                $scope.list.push(savedItem);
+            }, function (response) {
+                $scope.saving = false;
+            });
     }
+
+    $scope.refresh = function () {
+        $http.get('/WatchListItems')
+            .then(function (response) {
+                $scope.list = response.data;
+            }, function (response) {
+
+            });
+    }
+    $scope.refresh();
 
 }]);

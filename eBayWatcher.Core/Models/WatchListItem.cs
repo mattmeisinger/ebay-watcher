@@ -7,7 +7,14 @@ namespace eBayWatcher.Core.Models
 {
     public class WatchListItem
     {
+        public WatchListItem()
+        {
+            IgnoredEbayItemIds = new List<int>();
+        }
+
         public Guid Id { get; set; }
+        public string UserId { get; set; }
+
         public string Name { get; set; }
         public string SearchText { get; set; }
         public int? CategoryId { get; set; }
