@@ -1,4 +1,4 @@
-﻿var eBayWatcher = angular.module('eBayWatcher', ['AccountController', 'SearchController', 'CategorySearchController', 'MyListController']);
+﻿var eBayWatcher = angular.module('eBayWatcher', ['AccountController', 'SearchController', 'CategorySearchController', 'MyListController', 'UpdateItemController']);
 
 function setCookie(cname, cvalue, exdays) {
     var d = new Date();

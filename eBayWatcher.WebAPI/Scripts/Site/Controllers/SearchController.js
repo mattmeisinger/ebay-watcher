@@ -2,7 +2,6 @@
 
 SearchController.controller('SearchController', ['$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
 
-    console.log('SearchController');
     $scope.loading = true;
     $scope.searched = false;
 

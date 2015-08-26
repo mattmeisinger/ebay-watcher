@@ -2,7 +2,6 @@
 
 MyListController.controller('MyListController', ['$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
 
-    console.log('MyListController');
     $scope.loading = false;
     $scope.newItem = {};
     $scope.list = [];
@@ -66,5 +65,9 @@ MyListController.controller('MyListController', ['$scope', '$http', '$rootScope'
             });
     }
     $scope.refresh();
+
+    $rootScope.$on('RefreshList', function (details) {
+        $scope.refresh();
+    });
 
 }]);

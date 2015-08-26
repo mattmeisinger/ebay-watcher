@@ -66,68 +66,73 @@
             </div>
 
         </div>
-        <div class="col-md-9" ng-controller="SearchController">
-            <div style="padding-top: 30px" ng-hide="searched">Please add items to your list on the left. Then click on any item in the list to search for current items on eBay, as well as completed auctions.</div>
-            <div style="padding-top: 30px" ng-show="!loading || searched">
-                <strong>Completed - Sold</strong>
-                <div>
-                    <table class="table">
-                        <tr ng-repeat="r in results.Completed | filter: { Ignore: false } | orderBy:'Pin'" ng-class="{pinned: r.Pin}">
-                            <td>
-                                <div class="ebay-thumb">
-                                    <img ng-show="r.ImageUrl" ng-src="{{r.ImageUrl}}" alt="{{r.Name}}" />
-                                </div>
-                            </td>
-                            <td><a href="{{r.Url}}">{{r.Name}}</a></td>
-                            <td>{{r.Type}}</td>
-                            <td style="text-align: right;">{{r.AuctionPrice | number:2}}</td>
-                            <td style="white-space: nowrap;">
-                                <a href="" ng-click="ignore(r)">Ignore</a>
-                                <a href="" ng-click="pin(r)" ng-hide="r.Pin">Pin</a>
-                                <a href="" ng-click="unpin(r)" ng-show="r.Pin">Unpin</a>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                <strong>Auction</strong>
-                <div>
-                    <table class="table">
-                        <tr ng-repeat="r in results.CurrentAuction | filter: { Ignore: false } | orderBy:'Pin'" ng-class="{pinned: r.Pin}">
-                            <td>
-                                <div class="ebay-thumb">
-                                    <img ng-show="r.ImageUrl" ng-src="{{r.ImageUrl}}" alt="{{r.Name}}" />
-                                </div>
-                            </td>
-                            <td><a href="{{r.Url}}">{{r.Name}}</a></td>
-                            <td>{{r.Type}}</td>
-                            <td style="text-align: right;">{{r.AuctionPrice | number:2}}</td>
-                            <td style="white-space: nowrap;">
-                                <a href="" ng-click="ignore(r)">Ignore</a>
-                                <a href="" ng-click="pin(r)" ng-hide="r.Pin">Pin</a>
-                                <a href="" ng-click="unpin(r)" ng-show="r.Pin">Unpin</a>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                <strong>Buy it Now</strong>
-                <div>
-                    <table class="table">
-                        <tr ng-repeat="r in results.CurrentBuyItNow | filter: { Ignore: false } | orderBy:'Pin'" ng-class="{pinned: r.Pin}">
-                            <td>
-                                <div class="ebay-thumb">
-                                    <img ng-show="r.ImageUrl" ng-src="{{r.ImageUrl}}" alt="{{r.Name}}" />
-                                </div>
-                            </td>
-                            <td><a href="{{r.Url}}">{{r.Name}}</a></td>
-                            <td>{{r.Type}}</td>
-                            <td style="text-align: right;">{{r.AuctionPrice | number:2}}</td>
-                            <td style="white-space: nowrap;">
-                                <a href="" ng-click="ignore(r)">Ignore</a>
-                                <a href="" ng-click="pin(r)" ng-hide="r.Pin">Pin</a>
-                                <a href="" ng-click="unpin(r)" ng-show="r.Pin">Unpin</a>
-                            </td>
-                        </tr>
-                    </table>
+        <div class="col-md-9">
+            <div ng-controller="UpdateItemController">
+                <button ng-click="delete(item)" class="btn btn-danger" ng-show="item">Delete</button>
+            </div>
+            <div ng-controller="SearchController">
+                <div style="padding-top: 30px" ng-hide="searched">Please add items to your list on the left. Then click on any item in the list to search for current items on eBay, as well as completed auctions.</div>
+                <div style="padding-top: 30px" ng-show="!loading || searched">
+                    <strong>Completed - Sold</strong>
+                    <div>
+                        <table class="table">
+                            <tr ng-repeat="r in results.Completed | filter: { Ignore: false } | orderBy:'Pin'" ng-class="{pinned: r.Pin}">
+                                <td>
+                                    <div class="ebay-thumb">
+                                        <img ng-show="r.ImageUrl" ng-src="{{r.ImageUrl}}" alt="{{r.Name}}" />
+                                    </div>
+                                </td>
+                                <td><a href="{{r.Url}}">{{r.Name}}</a></td>
+                                <td>{{r.Type}}</td>
+                                <td style="text-align: right;">{{r.AuctionPrice | number:2}}</td>
+                                <td style="white-space: nowrap;">
+                                    <a href="" ng-click="ignore(r)">Ignore</a>
+                                    <a href="" ng-click="pin(r)" ng-hide="r.Pin">Pin</a>
+                                    <a href="" ng-click="unpin(r)" ng-show="r.Pin">Unpin</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <strong>Auction</strong>
+                    <div>
+                        <table class="table">
+                            <tr ng-repeat="r in results.CurrentAuction | filter: { Ignore: false } | orderBy:'Pin'" ng-class="{pinned: r.Pin}">
+                                <td>
+                                    <div class="ebay-thumb">
+                                        <img ng-show="r.ImageUrl" ng-src="{{r.ImageUrl}}" alt="{{r.Name}}" />
+                                    </div>
+                                </td>
+                                <td><a href="{{r.Url}}">{{r.Name}}</a></td>
+                                <td>{{r.Type}}</td>
+                                <td style="text-align: right;">{{r.AuctionPrice | number:2}}</td>
+                                <td style="white-space: nowrap;">
+                                    <a href="" ng-click="ignore(r)">Ignore</a>
+                                    <a href="" ng-click="pin(r)" ng-hide="r.Pin">Pin</a>
+                                    <a href="" ng-click="unpin(r)" ng-show="r.Pin">Unpin</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <strong>Buy it Now</strong>
+                    <div>
+                        <table class="table">
+                            <tr ng-repeat="r in results.CurrentBuyItNow | filter: { Ignore: false } | orderBy:'Pin'" ng-class="{pinned: r.Pin}">
+                                <td>
+                                    <div class="ebay-thumb">
+                                        <img ng-show="r.ImageUrl" ng-src="{{r.ImageUrl}}" alt="{{r.Name}}" />
+                                    </div>
+                                </td>
+                                <td><a href="{{r.Url}}">{{r.Name}}</a></td>
+                                <td>{{r.Type}}</td>
+                                <td style="text-align: right;">{{r.AuctionPrice | number:2}}</td>
+                                <td style="white-space: nowrap;">
+                                    <a href="" ng-click="ignore(r)">Ignore</a>
+                                    <a href="" ng-click="pin(r)" ng-hide="r.Pin">Pin</a>
+                                    <a href="" ng-click="unpin(r)" ng-show="r.Pin">Unpin</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

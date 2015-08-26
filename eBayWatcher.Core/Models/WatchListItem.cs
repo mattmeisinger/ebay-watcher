@@ -21,5 +21,7 @@ namespace eBayWatcher.Core.Models
         public string CategoryName { get; set; }
 
         public List<int> IgnoredEbayItemIds { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }

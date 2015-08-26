@@ -2,7 +2,6 @@
 
 CategorySearchController.controller('CategorySearchController', ['$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
 
-    console.log('CategorySearchController');
     $scope.searchTerm = '';
     $scope.selectedCategory = { id: null, name: '[Please select category]' };
     $scope.visible = false;

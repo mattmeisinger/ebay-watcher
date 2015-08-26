@@ -19,6 +19,7 @@ namespace eBayWatcher.DynamoDB
                 var query = table.Query(username, new QueryFilter());
                 var results = query.GetRemaining();
                 return results
+                    .Where(a => !a.ContainsKey("IsDeleted") || a["IsDeleted"].AsBoolean() == false)
                     .Select(a => new WatchListItem
                     {
                         UserId = a["UserId"].AsString(),
@@ -32,19 +33,43 @@ namespace eBayWatcher.DynamoDB
             }
         }
 
-        public static void Add(WatchListItem item)
+        public static void Save(WatchListItem item)
         {
             using (var client = DynamoClient.Create())
             {
                 var tableName = ConfigurationManager.AppSettings["DynamoDBWatchListItemsTableARN"].Split('/').Last();
                 var table = Table.LoadTable(client, tableName);
                 var dbItem = new Document();
+
+                // Key
                 dbItem["UserId"] = item.UserId;
                 dbItem["ItemId"] = item.Id;
+
+                // Fields to update
                 dbItem["Name"] = item.Name;
                 dbItem["SearchText"] = item.SearchText;
                 dbItem["CategoryId"] = item.CategoryId;
                 dbItem["CategoryName"] = item.CategoryName;
+
+                table.UpdateItem(dbItem);
+            }
+        }
+
+        public static void Delete(string id, string username)
+        {
+            using (var client = DynamoClient.Create())
+            {
+                var tableName = ConfigurationManager.AppSettings["DynamoDBWatchListItemsTableARN"].Split('/').Last();
+                var table = Table.LoadTable(client, tableName);
+                var dbItem = new Document();
+                
+                // Key
+                dbItem["UserId"] = username;
+                dbItem["ItemId"] = id;
+
+                // Fields to update
+                dbItem["IsDeleted"] = true;
+
                 table.UpdateItem(dbItem);
             }
         }

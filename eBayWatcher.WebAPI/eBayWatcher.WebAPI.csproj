@@ -145,9 +145,7 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -237,6 +235,7 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\Site\app.js" />
     <Content Include="Scripts\Site\Controllers\CategorySearchController.js" />
+    <Content Include="Scripts\Site\Controllers\UpdateItemController.js" />
     <Content Include="Scripts\Site\Controllers\MyListController.js" />
     <Content Include="Scripts\Site\Controllers\SearchController.js" />
     <Content Include="Scripts\Site\Controllers\AccountController.js" />
