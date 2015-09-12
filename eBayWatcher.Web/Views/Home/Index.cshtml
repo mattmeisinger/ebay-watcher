@@ -64,15 +64,26 @@
                 </div>
                 <div ng-hide="list.length">There are no items in your list.</div>
             </div>
-
         </div>
         <div class="col-md-9">
             <div ng-controller="UpdateItemController">
-                <button ng-click="delete(item)" class="btn btn-danger" ng-show="item">Delete</button>
+                <div class="body-section" ng-hide="loading || !item">
+                    <div style="text-align: right;">
+                        <button ng-click="delete(item)" class="btn btn-link" style="color: red" ng-show="item">Delete Item</button>
+                        <button ng-click="cancel()" class="btn btn-default" ng-show="item">Cancel</button>
+                        <button ng-click="save(item)" class="btn btn-primary" ng-show="item">Save</button>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary" ng-click="search(item)" style="width: 95%">Search eBay for this item</button>
+                    </div>
+                </div>
+                <div class="body-section" ng-hide="item">
+                    Please add items to your list on the left. Then click on any item in the list to search 
+                    for current items on eBay, as well as completed auctions.
+                </div>
             </div>
             <div ng-controller="SearchController">
-                <div style="padding-top: 30px" ng-hide="searched">Please add items to your list on the left. Then click on any item in the list to search for current items on eBay, as well as completed auctions.</div>
-                <div style="padding-top: 30px" ng-show="!loading || searched">
+                <div class="body-section" ng-show="!loading || searched">
                     <strong>Completed - Sold</strong>
                     <div>
                         <table class="table">
@@ -84,6 +95,10 @@
                                 </td>
                                 <td><a href="{{r.Url}}">{{r.Name}}</a></td>
                                 <td>{{r.Type}}</td>
+                                <td>
+                                    <div ng-show="r.Type === 'Auction'">{{r.BidCount}} bids, ending {{r.AuctionEndTime}}</div>
+                                    <div ng-show="r.Type !== 'Auction'">N/A</div>
+                                </td>
                                 <td style="text-align: right;">{{r.AuctionPrice | number:2}}</td>
                                 <td style="white-space: nowrap;">
                                     <a href="" ng-click="ignore(r)">Ignore</a>
@@ -104,6 +119,9 @@
                                 </td>
                                 <td><a href="{{r.Url}}">{{r.Name}}</a></td>
                                 <td>{{r.Type}}</td>
+                                <td>
+                                    {{r.BidCount}} bids, ending {{r.AuctionEndTime}}
+                                </td>
                                 <td style="text-align: right;">{{r.AuctionPrice | number:2}}</td>
                                 <td style="white-space: nowrap;">
                                     <a href="" ng-click="ignore(r)">Ignore</a>

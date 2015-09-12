@@ -49,6 +49,7 @@
     <Compile Include="DynamoClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Users.cs" />
+    <Compile Include="Utilities\DynamoDBExtensionMethods.cs" />
     <Compile Include="WatchListItems.cs" />
   </ItemGroup>
   <ItemGroup>

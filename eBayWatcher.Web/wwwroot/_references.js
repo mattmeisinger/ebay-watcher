@@ -6,4 +6,5 @@
 /// <reference path="js/controllers/MyListController.js" />
 /// <reference path="js/controllers/SearchController.js" />
 /// <reference path="js/controllers/UpdateItemController.js" />
-/// <reference path="js/site.js" />
+/// <reference path="js/services/dataservice.js" />
+/// <reference path="js/site.min.js" />

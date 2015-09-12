@@ -21,7 +21,7 @@ namespace eBayWatcher.WebAPI.Controllers
             {
                 Completed = FindingClient.GetCompletedItems((string)p.searchTerm, (int)p.categoryId),
                 CurrentBuyItNow = current.Where(a => a.Type != "Auction").ToArray(),
-                CurrentAuction = current.Where(a => a.Type == "Auction").ToArray(),
+                CurrentAuction = current.Where(a => a.Type == "Auction").ToArray()
             };
         }
     }

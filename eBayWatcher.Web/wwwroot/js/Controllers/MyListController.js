@@ -1,6 +1,5 @@
-﻿var MyListController = angular.module('MyListController', []);
-
-MyListController.controller('MyListController', ['$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
+﻿
+eBayWatcher.controller('MyListController', ['$scope', '$http', '$rootScope', 'DataService', function ($scope, $http, $rootScope, DataService) {
 
     $scope.loading = false;
     $scope.newItem = {};
@@ -11,10 +10,10 @@ MyListController.controller('MyListController', ['$scope', '$http', '$rootScope'
     $scope.newItem.CategoryName = "Stamps";
 
     $scope.selectCategory = function () {
-        $rootScope.$broadcast('OpenSelectCategoryWindow');
+        $rootScope.$broadcast('category:open');
     };
 
-    $rootScope.$on('CategorySelected', function (details, item) {
+    $rootScope.$on('category:selected', function (details, item) {
         console.log('received category selected');
         console.log(item);
         $scope.newItem.CategoryId = item.Id;
@@ -24,7 +23,7 @@ MyListController.controller('MyListController', ['$scope', '$http', '$rootScope'
     $scope.itemSelected = function (item) {
         console.log('item selected');
         console.log(item);
-        $rootScope.$broadcast('Search', item);
+        $rootScope.$broadcast('item:selected', item);
 
         $.each($scope.list, function (i, listItem) {
             listItem.Selected = false;
@@ -46,7 +45,7 @@ MyListController.controller('MyListController', ['$scope', '$http', '$rootScope'
             CategoryName: item.CategoryName
         };
         $scope.saving = true;
-        $http.post('/WatchListItems', { Username: getCookie('eBayWatcherUsername'), Token: getCookie('eBayWatcherToken'), item: newItem })
+        $http.post(DataService.baseUrl + '/WatchListItems', { Username: getCookie('eBayWatcherUsername'), Token: getCookie('eBayWatcherToken'), item: newItem })
             .then(function (response) {
                 var savedItem = response.data;
                 $scope.saving = false;
@@ -57,7 +56,7 @@ MyListController.controller('MyListController', ['$scope', '$http', '$rootScope'
     }
 
     $scope.refresh = function () {
-        $http.get('/WatchListItems')
+        $http.get(DataService.baseUrl + '/WatchListItems')
             .then(function (response) {
                 $scope.list = response.data;
             }, function (response) {
@@ -66,7 +65,7 @@ MyListController.controller('MyListController', ['$scope', '$http', '$rootScope'
     }
     $scope.refresh();
 
-    $rootScope.$on('RefreshList', function (details) {
+    $rootScope.$on('list:refresh', function (details) {
         $scope.refresh();
     });
 

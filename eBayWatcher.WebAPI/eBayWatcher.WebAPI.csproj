@@ -36,12 +36,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+    <DebugType>full</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DebugSymbols>true</DebugSymbols>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <ExcludeGeneratedDebugSymbol>false</ExcludeGeneratedDebugSymbol>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="eBay.Service, Version=3.921.0.0, Culture=neutral, PublicKeyToken=1d9d786a5932eaf0, processorArchitecture=MSIL">
@@ -165,8 +168,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -214,10 +215,6 @@
     <Content Include="newrelic\NewRelic.Agent.Core.dll" />
     <Content Include="newrelic\NewRelic.Agent.Extensions.dll" />
     <Content Include="newrelic\NewRelic.Profiler.dll" />
-    <Content Include="Scripts\angular.js" />
-    <Content Include="Scripts\angular.min.js" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="newrelic\newrelic.config" />
     <Content Include="newrelic\Extensions\extension.xsd">
       <SubType>Designer</SubType>
@@ -226,19 +223,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Properties\PublishProfiles\eBayWatcherWebAPI.pubxml" />
-    <Content Include="Scripts\angular.min.js.map" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
-    <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Scripts\respond.js" />
-    <Content Include="Scripts\respond.min.js" />
-    <Content Include="Scripts\Site\app.js" />
-    <Content Include="Scripts\Site\Controllers\CategorySearchController.js" />
-    <Content Include="Scripts\Site\Controllers\UpdateItemController.js" />
-    <Content Include="Scripts\Site\Controllers\MyListController.js" />
-    <Content Include="Scripts\Site\Controllers\SearchController.js" />
-    <Content Include="Scripts\Site\Controllers\AccountController.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

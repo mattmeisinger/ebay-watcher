@@ -1,6 +1,5 @@
-﻿var CategorySearchController = angular.module('CategorySearchController', []);
-
-CategorySearchController.controller('CategorySearchController', ['$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
+﻿
+eBayWatcher.controller('CategorySearchController', ['$scope', '$http', '$rootScope', 'DataService', function ($scope, $http, $rootScope, DataService) {
 
     $scope.searchTerm = '';
     $scope.selectedCategory = { id: null, name: '[Please select category]' };
@@ -8,7 +7,7 @@ CategorySearchController.controller('CategorySearchController', ['$scope', '$htt
     $scope.results = [];
     $scope.loading = false;
 
-    $rootScope.$on('OpenSelectCategoryWindow', function () {
+    $rootScope.$on('category:open', function () {
         console.log('Opening select category window...');
         $scope.visible = true;
         document.getElementById("categorySearchBox").focus();
@@ -24,7 +23,7 @@ CategorySearchController.controller('CategorySearchController', ['$scope', '$htt
 
     $scope.search = function () {
         $scope.loading = true;
-        $http.post('/Categories/Search', { searchTerm: $scope.searchTerm, eBayToken: getCookie('eBayWatcherToken') })
+        $http.post(DataService.baseUrl + '/Categories/Search', { searchTerm: $scope.searchTerm, eBayToken: getCookie('eBayWatcherToken') })
             .then(function (response) {
                 $scope.results = response.data;
                 $scope.loading = false;
@@ -36,7 +35,7 @@ CategorySearchController.controller('CategorySearchController', ['$scope', '$htt
     }
 
     $scope.selectItem = function (item) {
-        $rootScope.$broadcast("CategorySelected", item);
+        $rootScope.$broadcast("category:selected", item);
         $scope.visible = false;
     }
 

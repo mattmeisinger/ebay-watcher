@@ -1,17 +1,18 @@
-﻿var SearchController = angular.module('SearchController', []);
-
-SearchController.controller('SearchController', ['$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
+﻿
+eBayWatcher.controller('SearchController', ['$scope', '$http', '$rootScope', 'DataService', function ($scope, $http, $rootScope, DataService) {
 
     $scope.loading = true;
     $scope.searched = false;
+    $scope.wishlistItem = null;
 
-    $rootScope.$on('Search', function (details, item) {
+    $rootScope.$on('item:search', function (details, item) {
+        $scope.wishlistItem = item;
         $scope.search(item.SearchText, item.CategoryId);
     });
 
     $scope.search = function (searchTerm, categoryId) {
         $scope.loading = true;
-        $http.post('/EbaySearch', { searchTerm: searchTerm, categoryId: categoryId })
+        $http.post(DataService.baseUrl + '/EbaySearch', { searchTerm: searchTerm, categoryId: categoryId })
             .then(function (response) {
                 $scope.results = response.data;
                 $scope.loading = false;
@@ -21,14 +22,17 @@ SearchController.controller('SearchController', ['$scope', '$http', '$rootScope'
             });
     };
 
-    $scope.ignore = function (item) {
-        item.Ignore = true;
+    $scope.ignore = function (ebayListing) {
+        ebayListing.Ignore = true;
+        DataService.ignore($scope.wishlistItem, ebayListing);
     }
-    $scope.pin = function (item) {
-        item.Pin = true;
+    $scope.pin = function (ebayListing) {
+        ebayListing.Pin = true;
+        DataService.pin($scope.wishlistItem, ebayListing);
     }
-    $scope.unpin = function (item) {
-        item.Pin = false;
+    $scope.unpin = function (ebayListing) {
+        ebayListing.Pin = false;
+        DataService.unpin($scope.wishlistItem, ebayListing);
     }
 
 }]);

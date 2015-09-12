@@ -18,16 +18,19 @@ namespace eBayWatcher.DynamoDB
                 var table = Table.LoadTable(client, tableName);
                 var query = table.Query(username, new QueryFilter());
                 var results = query.GetRemaining();
+
                 return results
                     .Where(a => !a.ContainsKey("IsDeleted") || a["IsDeleted"].AsBoolean() == false)
                     .Select(a => new WatchListItem
                     {
-                        UserId = a["UserId"].AsString(),
-                        Id = a["ItemId"].AsGuid(),
-                        Name = a["Name"].AsString(),
-                        SearchText = a["SearchText"].AsString(),
-                        CategoryId = a["CategoryId"].AsInt(),
-                        CategoryName = a["CategoryName"].AsString()
+                        UserId = a.GetString("UserId"),
+                        Id = a.GetGuid("ItemId").Value,
+                        Name = a.GetString("Name"),
+                        SearchText = a.GetString("SearchText"),
+                        CategoryId = a.GetInt("CategoryId"),
+                        CategoryName = a.GetString("CategoryName"),
+                        IgnoredItemIds = a.GetArrayOfString("IgnoredItemIds").Select(b => b.ToIntOrDefault()).Where(b => b.HasValue).Select(b => b.Value).ToArray(),
+                        PinnedItemIds = a.GetArrayOfString("PinnedItemIds").Select(b => b.ToIntOrDefault()).Where(b => b.HasValue).Select(b => b.Value).ToArray()
                     })
                     .ToArray();
             }
@@ -50,11 +53,20 @@ namespace eBayWatcher.DynamoDB
                 dbItem["SearchText"] = item.SearchText;
                 dbItem["CategoryId"] = item.CategoryId;
                 dbItem["CategoryName"] = item.CategoryName;
+                dbItem["IgnoredItemIds"] = item.IgnoredItemIds.Select(a => a.ToString()).ToArray();
+                dbItem["PinnedItemIds"] = item.PinnedItemIds.Select(a => a.ToString()).ToArray();
 
                 table.UpdateItem(dbItem);
+
+                // TODO: Check to make sure the item is not deleted before updating it.
             }
         }
 
+        /// <summary>
+        /// Deleting items is performed by setting the IsDeleted property. No records should ever be fully removed.
+        /// </summary>
+        /// <param name="id">Watch list item ID.</param>
+        /// <param name="username"></param>
         public static void Delete(string id, string username)
         {
             using (var client = DynamoClient.Create())

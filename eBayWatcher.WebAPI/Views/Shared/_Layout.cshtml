@@ -1,78 +1,11 @@
 ﻿<!DOCTYPE html>
-<html ng-app="eBayWatcher">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>@ViewBag.Title</title>
-
-    @* Styles *@
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
-
-</head>
-<body>
-    <div class="navbar navbar-default navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a href="/" class="navbar-brand">eBay Watcher</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    @*<li><a href="/">Home</a></li>
-                    <li><a href="/Help">API Info</a></li>*@
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="container body-content">
-        <div>
-            @RenderBody()
-        </div>
-        @*<hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - eBay Watcher</p>
-        </footer>*@
-    </div>
-
-    <div ng-controller="CategorySearchController" ng-cloak>
-        @* Using simple dialog: https://gist.github.com/mattmeisinger/de693d6e93602c1ea442 *@
-        <div class="modal-window-backdrop" ng-show="visible" ng-click="backdropClicked()">
-            <div class="modal-window-content" ng-click="contentClicked($event)">
-                <h3>Find Category</h3>
-                <form ng-submit="search()">
-                    Search:
-                    <input type="text" ng-model="searchTerm" id="categorySearchBox" />
-                    <button class="btn btn-success" ng-disabled="loading">Search</button>
-                </form>
-                <div style="padding-top: 10px;" ng-show="loading">
-                    Searching eBay categories...
-                </div>
-                <div style="padding-top: 10px;" ng-show="searched && !loading">
-                    <div>Found {{results.length}} results.</div>
-                    <div ng-repeat="r in results">
-                        <span ng-repeat="p in r.Parents">
-                            <a href="" ng-click="selectItem(p)">{{p.Name}}</a>
-                            <span> > </span>
-                        </span>
-
-                        <a href="" ng-click="selectItem(r)">{{r.Name}}</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    @* Scripts *@
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-animate.min.js"></script>
-    @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/bundles/app")
-    @RenderSection("scripts", required: false)
-</body>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width" />
+        <title>@ViewBag.Title</title>
+    </head>
+    <body>
+        @RenderBody()
+    </body>
 </html>

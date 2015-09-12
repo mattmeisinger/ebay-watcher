@@ -9,7 +9,8 @@ namespace eBayWatcher.Core.Models
     {
         public WatchListItem()
         {
-            IgnoredEbayItemIds = new List<int>();
+            IgnoredItemIds = new int[] { };
+            PinnedItemIds = new int[] { };
         }
 
         public Guid Id { get; set; }
@@ -20,7 +21,8 @@ namespace eBayWatcher.Core.Models
         public int? CategoryId { get; set; }
         public string CategoryName { get; set; }
 
-        public List<int> IgnoredEbayItemIds { get; set; }
+        public int[] IgnoredItemIds { get; set; }
+        public int[] PinnedItemIds { get; set; }
 
         public bool IsDeleted { get; set; }
     }

@@ -1,6 +1,5 @@
-﻿var AccountController = angular.module('AccountController', []);
-
-AccountController.controller('AccountController', ['$scope', '$http', function ($scope, $http) {
+﻿
+eBayWatcher.controller('AccountController', ['$scope', '$http', 'DataService', function ($scope, $http, DataService) {
 
     $scope.loading = true;
     $scope.loginStep = 'StartingSession'; // StartingSession, AwaitingLogin, LoggedIn
@@ -34,7 +33,7 @@ AccountController.controller('AccountController', ['$scope', '$http', function (
     }
 
     $scope.startLogin = function () {
-        $http.post('/Account')
+        $http.post(DataService.baseUrl + '/Account')
             .then(function (response) {
                 console.log('Got new session id ' + response.data.SessionId);
                 setCookie('eBayWatcherSession', response.data.SessionId);
@@ -49,7 +48,7 @@ AccountController.controller('AccountController', ['$scope', '$http', function (
     };
     $scope.confirmLogin = function () {
         $scope.loading = true;
-        $http.post('/Account/ConfirmLogin', { sessionId: getCookie('eBayWatcherSession') })
+        $http.post(DataService.baseUrl + '/Account/ConfirmLogin', { sessionId: getCookie('eBayWatcherSession') })
             .then(function (response) {
                 console.log('Got token ' + response.data.Token + ' for user ' + response.data.Username);
                 setCookie('eBayWatcherToken', response.data.Token);
