@@ -1,157 +1,181 @@
 ﻿
-<div ng-controller="AccountController" ng-cloak>
-    <div class="row">
-        <div class="col-md-12" style="background-color: #acd3ef; border: 1px solid #0067b1; padding-top: 5px;">
-            
-            <p ng-show="loginStep === 'StartingSession'">
-                Connecting to eBay, please wait...
-            </p>
+<div ng-controller="AccountController" ng-cloak class="ui grid container">
 
-            <div ng-hide="loginStep === 'StartingSession'">
-                <div style="padding-bottom: 5px;">
-                    Status: {{getStatusMessage()}}
-                    <div ng-show="loginStep === 'LoggedIn'" style="float:right;">
-                        <a href="" ng-click="logOut()">Log Out</a>
-                    </div>
-                </div>
+    <div class="sixteen wide column" style="background-color: #acd3ef; border: 1px solid #0067b1; padding-top: 5px;">
+        <p ng-show="loginStep === 'StartingSession'">
+            Connecting to eBay, please wait...
+        </p>
 
-                <div ng-show="loginStep === 'AwaitingLogin'">
-                    <p>
-                        You must authenticate through eBay. Please click the link below, log in to eBay, then come back to this page.
-                    </p>
-                    <p>
-                        <a href="{{eBayLoginUrl}}" target="_blank" ng-disabled="loading">Login at eBay Site</a>
-                    </p>
-                    <p>After you logged in to eBay, click here:</p>
-                    <p>
-                        <button ng-click="confirmLogin()" class="btn btn-success" ng-disabled="loading">I've logged in to eBay, lets keep going!</button>
-                    </p>
+        <div ng-hide="loginStep === 'StartingSession'">
+            <div style="padding-bottom: 5px;">
+                Status: {{getStatusMessage()}}
+                <div ng-show="loginStep === 'LoggedIn'" style="float:right;">
+                    <a href="" ng-click="logOut()">Log Out</a>
                 </div>
             </div>
 
+            <div ng-show="loginStep === 'AwaitingLogin'">
+                <p>
+                    You must authenticate through eBay. Please click the link below, log in to eBay, then come back to this page.
+                </p>
+                <p>
+                    <a href="{{eBayLoginUrl}}" target="_blank" ng-disabled="loading">Login at eBay Site</a>
+                </p>
+                <p>After you logged in to eBay, click here:</p>
+                <p>
+                    <button ng-click="confirmLogin()" class="ui green button" ng-disabled="loading">I've logged in to eBay, lets keep going!</button>
+                </p>
+            </div>
         </div>
     </div>
-    <div class="row" ng-show="loginStep === 'LoggedIn'">
-        <div class="col-md-3" ng-controller="MyListController">
-            <h3>My List</h3>
-            <div class="new-item-form">
-                <strong>New Watch Item</strong>
-                <div class="form-row">
-                    <div style="display: inline-block; width: 73px; font-size: 10pt;">Name</div>
-                    <input type="text" ng-model="newItem.Name" />
-                </div>
-                <div class="form-row">
-                    <div style="display: inline-block; width: 73px; font-size: 10pt;">Search Text</div>
-                    <input type="text" ng-model="newItem.SearchText" placeholder="{{newItem.Name}}" />
-                </div>
-                <div class="form-row">
-                    <div style="display: inline-block; width: 73px; font-size: 10pt;">Category</div>
-                    <span>{{newItem.CategoryName}}</span>
-                </div>
-                <div>
-                    <a href="" class="btn btn-link" ng-click="selectCategory()" style="padding-left: 75px; padding-top: 0;">Select Category</a>
-                </div>
-                <div style="text-align: right;">
-                    <button class="btn btn-primary" ng-click="addItem(newItem)">Add Item</button>
+
+    <!-- Left column -->
+    <div class="four wide column" ng-controller="MyListController" ng-show="loginStep === 'LoggedIn'" style="font-size: 80%">
+        <div class="ui attached message">
+            <h4 class="header">New Watch Item</h4>
+        </div>
+        <div class="ui form attached fluid segment">
+            <div class="field">
+                <label>Name</label>
+                <input type="text" ng-model="newItem.Name" />
+            </div>
+            <div class="field">
+                <label>Search Text</label>
+                <input type="text" ng-model="newItem.SearchText" placeholder="{{newItem.Name}}" />
+            </div>
+            <div class="field">
+                <label>Category</label>
+                <div class="fluid ui left labeled button">
+                    <div class="fluid ui basic label" ng-bind="newItem.CategoryName" style="font-weight: normal"></div>
+                    <a href="" class="ui icon button" ng-click="selectCategory()">
+                        <i class="find icon"></i>
+                    </a>
                 </div>
             </div>
 
-            <div style="padding-top: 10px;">
-                <div class="my-list-item" ng-repeat="item in list" ng-click="itemSelected(item)" ng-class="{selected: item.Selected}">
-                    {{item.Name}}
-                    <br/>
-                    {{item.CategoryName}}
-                </div>
-                <div ng-hide="list.length">There are no items in your list.</div>
+            <div class="field">
+                <button class="ui primary button" ng-click="addItem(newItem)">Add Item</button>
             </div>
         </div>
-        <div class="col-md-9">
-            <div ng-controller="UpdateItemController">
-                <div class="body-section" ng-hide="loading || !item">
-                    <div style="text-align: right;">
-                        <button ng-click="delete(item)" class="btn btn-link" style="color: red" ng-show="item">Delete Item</button>
-                        <button ng-click="cancel()" class="btn btn-default" ng-show="item">Cancel</button>
-                        <button ng-click="save(item)" class="btn btn-primary" ng-show="item">Save</button>
-                    </div>
-                    <div>
-                        <button class="btn btn-primary" ng-click="search(item)" style="width: 95%">Search eBay for this item</button>
-                    </div>
+
+        <div style="padding-top: 10px;">
+            <div class="my-list-item" ng-repeat="item in list" ng-click="itemSelected(item)" ng-class="{selected: item.Selected}">
+                {{item.Name}}
+                <br/>
+                {{item.CategoryName}}
+            </div>
+            <div ng-hide="list.length">There are no items in your list.</div>
+        </div>
+    </div>
+
+    <!-- Right column -->
+    <div class="twelve wide column" ng-show="loginStep === 'LoggedIn'">
+        <div ng-controller="UpdateItemController">
+            <div class="body-section" ng-hide="loading || !item">
+                <div>
+
                 </div>
-                <div class="body-section" ng-hide="item">
-                    Please add items to your list on the left. Then click on any item in the list to search 
-                    for current items on eBay, as well as completed auctions.
+                <div style="text-align: right; padding-top: 5px;">
+                    <button ng-click="delete(item)" class="ui red basic button" style="color: red" ng-show="item">Delete Item</button>
+                    <button ng-click="cancel()" class="ui button" ng-show="item">Cancel</button>
+                    <button ng-click="save(item)" class="ui primary button" ng-show="item">Save</button>
+                </div>
+                <div style="text-align: center; padding-top: 15px;">
+                    <button class="ui primary button" ng-click="search(item)">Search eBay for this item</button>
                 </div>
             </div>
-            <div ng-controller="SearchController">
-                <div class="body-section" ng-show="!loading || searched">
-                    <strong>Completed - Sold</strong>
-                    <div>
-                        <table class="table">
-                            <tr ng-repeat="r in results.Completed | filter: { Ignore: false } | orderBy:'Pin'" ng-class="{pinned: r.Pin}">
-                                <td>
-                                    <div class="ebay-thumb">
-                                        <img ng-show="r.ImageUrl" ng-src="{{r.ImageUrl}}" alt="{{r.Name}}" />
-                                    </div>
-                                </td>
-                                <td><a href="{{r.Url}}">{{r.Name}}</a></td>
-                                <td>{{r.Type}}</td>
-                                <td>
-                                    <div ng-show="r.Type === 'Auction'">{{r.BidCount}} bids, ending {{r.AuctionEndTime}}</div>
-                                    <div ng-show="r.Type !== 'Auction'">N/A</div>
-                                </td>
-                                <td style="text-align: right;">{{r.AuctionPrice | number:2}}</td>
-                                <td style="white-space: nowrap;">
-                                    <a href="" ng-click="ignore(r)">Ignore</a>
-                                    <a href="" ng-click="pin(r)" ng-hide="r.Pin">Pin</a>
-                                    <a href="" ng-click="unpin(r)" ng-show="r.Pin">Unpin</a>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                    <strong>Auction</strong>
-                    <div>
-                        <table class="table">
-                            <tr ng-repeat="r in results.CurrentAuction | filter: { Ignore: false } | orderBy:'Pin'" ng-class="{pinned: r.Pin}">
-                                <td>
-                                    <div class="ebay-thumb">
-                                        <img ng-show="r.ImageUrl" ng-src="{{r.ImageUrl}}" alt="{{r.Name}}" />
-                                    </div>
-                                </td>
-                                <td><a href="{{r.Url}}">{{r.Name}}</a></td>
-                                <td>{{r.Type}}</td>
-                                <td>
-                                    {{r.BidCount}} bids, ending {{r.AuctionEndTime}}
-                                </td>
-                                <td style="text-align: right;">{{r.AuctionPrice | number:2}}</td>
-                                <td style="white-space: nowrap;">
-                                    <a href="" ng-click="ignore(r)">Ignore</a>
-                                    <a href="" ng-click="pin(r)" ng-hide="r.Pin">Pin</a>
-                                    <a href="" ng-click="unpin(r)" ng-show="r.Pin">Unpin</a>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                    <strong>Buy it Now</strong>
-                    <div>
-                        <table class="table">
-                            <tr ng-repeat="r in results.CurrentBuyItNow | filter: { Ignore: false } | orderBy:'Pin'" ng-class="{pinned: r.Pin}">
-                                <td>
-                                    <div class="ebay-thumb">
-                                        <img ng-show="r.ImageUrl" ng-src="{{r.ImageUrl}}" alt="{{r.Name}}" />
-                                    </div>
-                                </td>
-                                <td><a href="{{r.Url}}">{{r.Name}}</a></td>
-                                <td>{{r.Type}}</td>
-                                <td style="text-align: right;">{{r.AuctionPrice | number:2}}</td>
-                                <td style="white-space: nowrap;">
-                                    <a href="" ng-click="ignore(r)">Ignore</a>
-                                    <a href="" ng-click="pin(r)" ng-hide="r.Pin">Pin</a>
-                                    <a href="" ng-click="unpin(r)" ng-show="r.Pin">Unpin</a>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
+            <div class="body-section" ng-hide="item">
+                Please add items to your list on the left. Then click on any item in the list to search 
+                for current items on eBay, as well as completed auctions.
+            </div>
+        </div>
+        <div ng-controller="SearchController as s">
+
+            <div ng-show="s.loading && !s.searched" class="ui segment">
+                <div class="ui active dimmer">
+                    <div class="ui text loader">Loading</div>
                 </div>
+                <p></p>
+            </div>
+
+            <div class="body-section" ng-show="!loading || searched">
+
+                <!-- Completed -->
+                <div class="ui attached message">
+                    <h4 class="header">Completed / Sold</h4>
+                </div>
+                <table class="ui attached table">
+                    <tr ng-repeat="r in results.Completed | filter: { Ignore: false } | orderBy:'Pin'" ng-class="{pinned: r.Pin}">
+                        <td class="collapsing">
+                            <div class="ebay-thumb">
+                                <img ng-show="r.ImageUrl" ng-src="{{r.ImageUrl}}" alt="{{r.Name}}" />
+                            </div>
+                        </td>
+                        <td><a href="{{r.Url}}">{{r.Name}}</a></td>
+                        <td>{{r.Type}}</td>
+                        <td>
+                            <div ng-show="r.Type === 'Auction'">{{r.BidCount}} bids, ending {{r.AuctionEndTime}}</div>
+                            <div ng-show="r.Type !== 'Auction'">N/A</div>
+                        </td>
+                        <td class="right-align collapsing">{{r.AuctionPrice | number:2}}</td>
+                        <td class="collapsing">
+                            <a href="" ng-click="ignore(r)">Ignore</a>
+                            <a href="" ng-click="pin(r)" ng-hide="r.Pin">Pin</a>
+                            <a href="" ng-click="unpin(r)" ng-show="r.Pin">Unpin</a>
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="ui divider"></div>
+
+                <!-- Auction -->
+                <div class="ui attached orange message">
+                    <h4 class="header">Auction</h4>
+                </div>
+                <table class="ui attached table">
+                    <tr ng-repeat="r in results.CurrentAuction | filter: { Ignore: false } | orderBy:'Pin'" ng-class="{pinned: r.Pin}">
+                        <td class="collapsing">
+                            <div class="ebay-thumb">
+                                <img ng-show="r.ImageUrl" ng-src="{{r.ImageUrl}}" alt="{{r.Name}}" />
+                            </div>
+                        </td>
+                        <td><a href="{{r.Url}}">{{r.Name}}</a></td>
+                        <td>{{r.Type}}</td>
+                        <td>
+                            {{r.BidCount}} bids, ending {{r.AuctionEndTime}}
+                        </td>
+                        <td class="right-align collapsing">{{r.AuctionPrice | number:2}}</td>
+                        <td class="collapsing">
+                            <a href="" ng-click="ignore(r)">Ignore</a>
+                            <a href="" ng-click="pin(r)" ng-hide="r.Pin">Pin</a>
+                            <a href="" ng-click="unpin(r)" ng-show="r.Pin">Unpin</a>
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="ui divider"></div>
+                
+                <!-- Buy it Now -->
+                <div class="ui attached green message">
+                    <h4 class="header">Buy it Now</h4>
+                </div>
+                <table class="ui attached table">
+                    <tr ng-repeat="r in results.CurrentBuyItNow | filter: { Ignore: false } | orderBy:'Pin'" ng-class="{pinned: r.Pin}">
+                        <td class="collapsing">
+                            <div class="ebay-thumb">
+                                <img ng-show="r.ImageUrl" ng-src="{{r.ImageUrl}}" alt="{{r.Name}}" />
+                            </div>
+                        </td>
+                        <td><a href="{{r.Url}}">{{r.Name}}</a></td>
+                        <td>{{r.Type}}</td>
+                        <td class="right-align collapsing">{{r.AuctionPrice | number:2}}</td>
+                        <td class="collapsing">
+                            <a href="" ng-click="ignore(r)">Ignore</a>
+                            <a href="" ng-click="pin(r)" ng-hide="r.Pin">Pin</a>
+                            <a href="" ng-click="unpin(r)" ng-show="r.Pin">Unpin</a>
+                        </td>
+                    </tr>
+                </table>
             </div>
         </div>
     </div>

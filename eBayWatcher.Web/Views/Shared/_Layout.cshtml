@@ -6,26 +6,22 @@
         <title>@ViewData["Title"] - eBay Watcher</title>
 
         <environment names="Development">
-            <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+            <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.3/semantic.css" />
         </environment>
         <environment names="Staging,Production">
-            <link rel="stylesheet" href="//ajax.aspnetcdn.com/ajax/bootstrap/3.0.0/css/bootstrap.min.css"
+            <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.3/semantic.min.css"
                   asp-fallback-href="~/lib/bootstrap/css/bootstrap.min.css"
                   asp-fallback-test-class="hidden" asp-fallback-test-property="visibility" asp-fallback-test-value="hidden" />
         </environment>
 
-        <link rel="stylesheet" href="~/css/site.css" asp-file-version="true" />
+        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
     </head>
     <body ng-app="eBayWatcher">
-        <div class="navbar navbar-default navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <a href="/" class="navbar-brand">eBay Watcher</a>
-                </div>
-            </div>
+        <div class="ui menu fixed top">
+            <a href="/" class="item">eBay Watcher</a>
         </div>
-        <div class="container body-content">
+        <div>
             @RenderBody()
         </div>
 
@@ -59,18 +55,18 @@
 
         </div>
 
-        <script src="~/lib/angular/angular.js" asp-file-version="true"></script>
-        <script src="~/lib/jquery/dist/jquery.js" asp-file-version="true"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js" asp-file-version="true"></script>
-        <script src="~/lib/underscore/underscore.js" asp-file-version="true"></script>
+        <script src="~/lib/angular/angular.js" asp-append-version="true"></script>
+        <script src="~/lib/jquery/dist/jquery.js" asp-append-version="true"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.3/semantic.js" asp-append-version="true"></script>
+        <script src="~/lib/underscore/underscore.js" asp-append-version="true"></script>
 
-        <script src="~/js/app.js" asp-file-version="true"></script>
-        <script src="~/js/services/DataService.js" asp-file-version="true"></script>
-        <script src="~/js/Controllers/AccountController.js" asp-file-version="true"></script>
-        <script src="~/js/Controllers/CategorySearchController.js" asp-file-version="true"></script>
-        <script src="~/js/Controllers/MyListController.js" asp-file-version="true"></script>
-        <script src="~/js/Controllers/SearchController.js" asp-file-version="true"></script>
-        <script src="~/js/Controllers/UpdateItemController.js" asp-file-version="true"></script>
+        <script src="~/js/app.js" asp-append-version="true"></script>
+        <script src="~/js/services/DataService.js" asp-append-version="true"></script>
+        <script src="~/js/Controllers/AccountController.js" asp-append-version="true"></script>
+        <script src="~/js/Controllers/CategorySearchController.js" asp-append-version="true"></script>
+        <script src="~/js/Controllers/MyListController.js" asp-append-version="true"></script>
+        <script src="~/js/Controllers/SearchController.js" asp-append-version="true"></script>
+        <script src="~/js/Controllers/UpdateItemController.js" asp-append-version="true"></script>
 
         @RenderSection("scripts", required: false)
     </body>
