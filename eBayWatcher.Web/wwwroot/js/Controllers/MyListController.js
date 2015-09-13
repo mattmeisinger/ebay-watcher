@@ -45,14 +45,7 @@ eBayWatcher.controller('MyListController', ['$scope', '$http', '$rootScope', 'Da
             CategoryName: item.CategoryName
         };
         $scope.saving = true;
-        $http.post(DataService.baseUrl + '/WatchListItems', { Username: getCookie('eBayWatcherUsername'), Token: getCookie('eBayWatcherToken'), item: newItem })
-            .then(function (response) {
-                var savedItem = response.data;
-                $scope.saving = false;
-                $scope.list.push(savedItem);
-            }, function (response) {
-                $scope.saving = false;
-            });
+        DataService.saveWishlistItem(newItem);
     }
 
     $scope.refresh = function () {

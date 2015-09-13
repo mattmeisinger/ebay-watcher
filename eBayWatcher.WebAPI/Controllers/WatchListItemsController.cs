@@ -24,11 +24,14 @@ namespace eBayWatcher.WebAPI.Controllers
 
         [Route("WatchListItems")]
         [HttpPost]
-        public WatchListItem Save([FromBody] AddWatchListItemModel p)
+        public WatchListItem Save([FromBody] WatchListItem item)
         {
-            var item = p.Item;
-            item.Id = Guid.NewGuid();
-            item.UserId = p.Username;
+            var username = GetHeader("eBayWatcherUsername");
+            if (item.Id == null)
+            {
+                item.Id = Guid.NewGuid();
+                item.UserId = username;
+            }
             DynamoDB.WatchListItems.Save(item);
             return item;
         }
