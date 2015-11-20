@@ -166,8 +166,12 @@
     </Compile>
     <Compile Include="Models\AddWatchListItemModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\ExtensionMethods.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\site.min.css">
+      <DependentUpon>Site.css</DependentUpon>
+    </Content>
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -224,8 +228,43 @@
     </None>
     <None Include="Properties\PublishProfiles\eBayWatcherWebAPI.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\app.js" />
+    <Content Include="Scripts\controllers\AccountController.js" />
+    <Content Include="Scripts\controllers\CategorySearchController.js" />
+    <Content Include="Scripts\controllers\MyListController.js" />
+    <Content Include="Scripts\controllers\SearchController.js" />
+    <Content Include="Scripts\controllers\UpdateItemController.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\lib\angular\angular-csp.css" />
+    <Content Include="Scripts\lib\angular\angular.js" />
+    <Content Include="Scripts\lib\angular\angular.min.js">
+      <DependentUpon>angular.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\lib\angular\index.js" />
+    <Content Include="Scripts\lib\bootstrap\dist\css\bootstrap-theme.css" />
+    <Content Include="Scripts\lib\bootstrap\dist\css\bootstrap-theme.min.css">
+      <DependentUpon>bootstrap-theme.css</DependentUpon>
+    </Content>
+    <Content Include="Scripts\lib\bootstrap\dist\css\bootstrap.css" />
+    <Content Include="Scripts\lib\bootstrap\dist\css\bootstrap.min.css">
+      <DependentUpon>bootstrap.css</DependentUpon>
+    </Content>
+    <Content Include="Scripts\lib\bootstrap\dist\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Scripts\lib\bootstrap\dist\js\bootstrap.js" />
+    <Content Include="Scripts\lib\bootstrap\dist\js\bootstrap.min.js">
+      <DependentUpon>bootstrap.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\lib\bootstrap\dist\js\npm.js" />
+    <Content Include="Scripts\lib\bootstrap\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Scripts\lib\jquery\dist\jquery.js" />
+    <Content Include="Scripts\lib\jquery\dist\jquery.min.js">
+      <DependentUpon>jquery.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\lib\underscore\underscore-min.js" />
+    <Content Include="Scripts\lib\underscore\underscore.js" />
+    <Content Include="Scripts\services\DataService.js" />
+    <Content Include="Scripts\site.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -240,6 +279,36 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Scripts\lib\angular\.bower.json" />
+    <Content Include="Scripts\lib\angular\angular.min.js.gzip">
+      <DependentUpon>angular.min.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\lib\angular\angular.min.js.map">
+      <DependentUpon>angular.min.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\lib\angular\bower.json" />
+    <Content Include="Scripts\lib\angular\package.json" />
+    <Content Include="Scripts\lib\angular\README.md" />
+    <Content Include="Scripts\lib\bootstrap\dist\css\bootstrap-theme.css.map">
+      <DependentUpon>bootstrap-theme.css</DependentUpon>
+    </Content>
+    <Content Include="Scripts\lib\bootstrap\dist\css\bootstrap.css.map">
+      <DependentUpon>bootstrap.css</DependentUpon>
+    </Content>
+    <Content Include="Scripts\lib\bootstrap\dist\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Scripts\lib\bootstrap\dist\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Scripts\lib\bootstrap\dist\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Scripts\lib\bootstrap\dist\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Scripts\lib\bootstrap\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Scripts\lib\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Scripts\lib\bootstrap\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Scripts\lib\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Scripts\lib\jquery\dist\jquery.min.map">
+      <DependentUpon>jquery.min.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\lib\underscore\underscore-min.map">
+      <DependentUpon>underscore-min.js</DependentUpon>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\eBayWatcher.Core\eBayWatcher.Core.csproj">

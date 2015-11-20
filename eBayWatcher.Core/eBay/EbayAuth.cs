@@ -1,9 +1,9 @@
-﻿using eBay.Service.Call;
-using eBayWatcher.Core.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using eBay.Service.Call;
+using eBayWatcher.Core.Models;
 
 namespace eBayWatcher.Core.eBay
 {
@@ -15,10 +15,12 @@ namespace eBayWatcher.Core.eBay
         {
             var client = EbayClientHelper.GetSdkClient();
             var call = new GetSessionIDCall(client);
-            var sessionId = call.GetSessionID(EbaySettings.RuName);
-            var urlEncodedSessionID = System.Net.WebUtility.UrlEncode(sessionId);
-            var loginUrl = string.Format("https://signin.ebay.com/ws/eBayISAPI.dll?SignIn&RuName={0}&SessID={1}&AcceptURL=http://google.com", EbaySettings.RuName, urlEncodedSessionID);
 
+            var service = new WebServices.eBayService.eBayAPIInterfaceService();
+
+            var sessionId = call.GetSessionID(EbaySettings.RuName);
+            var urlEncodedSessionID = sessionId; //System.Net.WebUtility.UrlEncode(sessionId);
+            var loginUrl = string.Format("https://signin.ebay.com/ws/eBayISAPI.dll?SignIn&runame={0}&SessID={1}", EbaySettings.RuName, urlEncodedSessionID);
             var data = new EbayAuthRequest
             {
                 SessionId = sessionId,
@@ -33,7 +35,6 @@ namespace eBayWatcher.Core.eBay
         {
             // Get token from Ebay
             var client = EbayClientHelper.GetSdkClient();
-
 
             // Otherwise get the user id of the logged in user from Ebay
             log.Debug("Fetching username for Session ID " + sessionId);

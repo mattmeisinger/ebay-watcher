@@ -1,14 +1,11 @@
-﻿using eBay.Service.Core.Sdk;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Net;
-using System.Xml;
 using System.Xml.Linq;
-using System.IO;
 using eBayWatcher.Core.Helpers;
+using eBay.Service.Core.Sdk;
 
 namespace eBayWatcher.Core.eBay.CallHandlers
 {

@@ -12,6 +12,9 @@ namespace eBayWatcher.DynamoDB
     {
         public static WatchListItem[] Get(string username)
         {
+            if (username.IsNullOrWhiteSpace())
+                return new WatchListItem[] { };
+
             using (var client = DynamoClient.Create())
             {
                 var tableName = ConfigurationManager.AppSettings["DynamoDBWatchListItemsTableARN"].Split('/').Last();
@@ -29,8 +32,8 @@ namespace eBayWatcher.DynamoDB
                         SearchText = a.GetString("SearchText"),
                         CategoryId = a.GetInt("CategoryId"),
                         CategoryName = a.GetString("CategoryName"),
-                        IgnoredItemIds = a.GetArrayOfString("IgnoredItemIds").Select(b => b.ToIntOrDefault()).Where(b => b.HasValue).Select(b => b.Value).ToArray(),
-                        PinnedItemIds = a.GetArrayOfString("PinnedItemIds").Select(b => b.ToIntOrDefault()).Where(b => b.HasValue).Select(b => b.Value).ToArray()
+                        IgnoredItemIds = a.GetArrayOfString("IgnoredItemIds").Select(b => b.ToIntOrDefault()).Where(b => b.HasValue).Select(b => b.Value).ToList(),
+                        PinnedItemIds = a.GetArrayOfString("PinnedItemIds").Select(b => b.ToIntOrDefault()).Where(b => b.HasValue).Select(b => b.Value).ToList()
                     })
                     .ToArray();
             }

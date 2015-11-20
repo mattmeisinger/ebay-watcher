@@ -8,8 +8,11 @@ namespace eBayWatcher.Core
 {
     public class Account
     {
+        private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
+
         public static EBayAuthStatus StartSession()
         {
+            log.Info("Starting session, getting ");
             var auth = EbayAuth.CreateNewAuthRequest();
             return new EBayAuthStatus
             {
