@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eBayWatcher.WebAPI", "eBayWatcher.WebAPI\eBayWatcher.WebAPI.csproj", "{E0E58708-BD3B-4F8B-97B6-1FD2B0525070}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PublishScripts", "PublishScripts", "{289AB783-120B-462D-8FF1-B885CA7C59F7}"
 	ProjectSection(SolutionItems) = preProject
 		PublishScripts\AzureVMPublishModule.psm1 = PublishScripts\AzureVMPublishModule.psm1
@@ -17,11 +15,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configurations", "Configura
 		PublishScripts\Configurations\eBayWatcherWebAPI-WAWS-dev.json = PublishScripts\Configurations\eBayWatcherWebAPI-WAWS-dev.json
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eBayWatcher.WebAPI", "eBayWatcher.WebAPI\eBayWatcher.WebAPI.csproj", "{E0E58708-BD3B-4F8B-97B6-1FD2B0525070}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eBayWatcher.DynamoDB", "eBayWatcher.DynamoDB\eBayWatcher.DynamoDB.csproj", "{2334D952-198E-4EF5-A77A-975CBD71F867}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eBayWatcher.Core", "eBayWatcher.Core\eBayWatcher.Core.csproj", "{4219E847-CB81-49B6-A607-C1281384040C}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "eBayWatcher.Web", "eBayWatcher.Web\eBayWatcher.Web.xproj", "{C4AD0C98-1F66-4DE0-AFA4-3971A5A65A74}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eBayWatcher.Web", "eBayWatcher.Web\eBayWatcher.Web.csproj", "{C4AD0C98-1F66-4DE0-AFA4-3971A5A65A74}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

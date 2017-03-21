@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>dnx451;dnxcore50</TargetFrameworks>
+    <AssemblyName>eBayWatcher.Web</AssemblyName>
+    <PackageId>eBayWatcher.Web</PackageId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="wwwroot\**\*;node_modules\**\*;bower_components" />
+    <EmbeddedResource Remove="wwwroot\**\*;node_modules\**\*;bower_components" />
+    <None Update="node_modules\**\*;bower_components;**.xproj;**.user;**.vspscc">
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.Diagnostics" Version="1.0.0-beta6" />
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="6.0.0-beta6" />
+    <PackageReference Include="Microsoft.AspNet.Mvc.TagHelpers" Version="6.0.0-beta6" />
+    <PackageReference Include="Microsoft.AspNet.Server.IIS" Version="1.0.0-beta6" />
+    <PackageReference Include="Microsoft.AspNet.Server.WebListener" Version="1.0.0-beta6" />
+    <PackageReference Include="Microsoft.AspNet.StaticFiles" Version="1.0.0-beta6" />
+    <PackageReference Include="Microsoft.AspNet.Tooling.Razor" Version="1.0.0-beta6" />
+    <PackageReference Include="Microsoft.Framework.Configuration.Json" Version="1.0.0-beta6" />
+    <PackageReference Include="Microsoft.Framework.Logging" Version="1.0.0-beta6" />
+    <PackageReference Include="Microsoft.Framework.Logging.Console" Version="1.0.0-beta6" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="1.0.1" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'dnx451' ">
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
+  <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish" Condition=" '$(IsCrossTargetingBuild)' != 'true' ">
+    <Exec Command="npm install" />
+    <Exec Command="bower install" />
+    <Exec Command="gulp clean" />
+    <Exec Command="gulp min" />
+  </Target>
+
+</Project>

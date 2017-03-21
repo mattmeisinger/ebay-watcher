@@ -2,7 +2,7 @@
 eBayWatcher.factory('DataService', ['$http', '$rootScope', function ($http, $rootScope) {
 
     var service = {
-        baseUrl: '' /* Use the current web app */, //'https://ebaywatcherwebapi.azurewebsites.net',
+        baseUrl: '', /* Use the current web app */
         notifyAllOfItemUpdated: function (item) {
             $rootScope.$broadcast('item:updated', item);
         }
@@ -45,10 +45,10 @@ eBayWatcher.factory('DataService', ['$http', '$rootScope', function ($http, $roo
         return $http.post(this.baseUrl + '/WatchListItems', wishlistItem)
             .then(function (response) {
                 var savedItem = response.data;
-                $scope.saving = false;
-                $scope.list.push(savedItem);
+                service.saving = false;
+                service.list.push(savedItem);
             }, function (response) {
-                $scope.saving = false;
+                service.saving = false;
             });
     }
 
